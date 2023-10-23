@@ -20,4 +20,4 @@ bash # reload bash shell
 
 
 
-Otherwise use the cheat sheet: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+Otherwise use the cheat sheet from the docs: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
