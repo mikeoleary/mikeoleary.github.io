@@ -40,7 +40,11 @@ So this post is intended to be very short and only for the purpose of me remembe
 - after doing this, edit a few things on BIG-IP
   - the local address on the tunnel in BIG-IP config should be the self-IP of the relevant Interface, probably not the public IP of the BIG-IP
   - I also set up a route on the F5 device so that the CIDR block of the AWS VPC was routed over the tunnel.
-  - I also edited the IKE peer of the AWS TGW tunnels in BIG-IP config so that NAT Traversal was set to ON (not OFF). I had to do this via TMSH because the GUI told me that there was a general database error when I tried to edit the IKE peer in the GUI.
+  - I also edited the IKE peer of the AWS TGW tunnels in BIG-IP config so that NAT Traversal was set to ON (not OFF). I had to do this via TMSH with the command below because the GUI told me that there was a general database error when I tried to edit the IKE peer in the GUI.
+
+{% highlight bash %}
+tmsh modify net ipsec ike-peer <tunnel name> nat-traversal on
+{% endhighlight %}
 
 ### Route tables between clouds
 - In Azure, set a UDR so that the CIDR block of AWS VPC is pointing at selfIP of BIG-IP. Check "IP Forwarding" enabled.
@@ -54,7 +58,7 @@ From your host in Azure, curl or ping your host in AWS.
 
 ### Troubleshooting
 - Command to see IPSEC tunnel on BIG-IP. You want it to have a status of Created with a timestamp.
-{% highlight tcl %}
+{% highlight bash %}
 tmsh show net ipsec ipsec-sa all-properties
 {% endhighlight %}
 
