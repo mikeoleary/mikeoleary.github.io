@@ -19,8 +19,8 @@ sudo apt install docker.io -y
 sudo systemctl start docker
 sudo systemctl enable docker
  
-# check and see if server is running
-systemctl status docker
+# to check and see if Ubuntu is running the docker service, uncomment below.
+#systemctl status docker
  
 # Add your user to Docker group to avoid typing sudo everytime you run docker commands.
 sudo usermod -aG docker ${USER}
