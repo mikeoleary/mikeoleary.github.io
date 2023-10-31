@@ -2,7 +2,7 @@
 layout: post
 title:  "Azure LB and a few advanced notes"
 date:   2023-10-30 09:00:00 -0400
-categories: Docker
+categories: Azure
 ---
 
 I deal with Azure Load Balancer a lot, and occasionally the Azure Gateway Load Balancer (GWLB) and, once in a while, other PaaS offerings like Application Gateway. I've written a handful of articles over the last few years that focused on or included Azure Load Balancer. The most popular seem to be these 2:
@@ -15,7 +15,11 @@ The following is mostly for the sake of my own bookmarking these sites.
 ### Sites to remember when explaining Azure LB
 
 #### 1. Floating IP #### 
-In this mode, the LB does **not** perform Destination NAT as the traffic arrives at the VM. However, you **must** use the primary ipconfig (in F5 parlance, the self IP) as the backend pool member in the Azure LB. I never knew where this was documented before now, [but it's here](https://community.f5.com/t5/technical-articles/big-ip-integration-with-azure-gateway-load-balancer/ta-p/291102).
+In this mode, the LB does **not** perform Destination NAT as the traffic arrives at the VM. However, you **must** use the primary ipconfig (in F5 parlance, the self IP) as the backend pool member in the Azure LB. I never knew where this was documented before now, [but it's here](https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-floating-ip#limitations).
+
+> You can't use Floating IP on secondary IP configurations for Load Balancing scenarios. 
+
+For this reason, if you want to use Floating IP and put F5 devices in Active/Standby in the backend pool, I suggest a workaround that I will blog about some other time, but you'll need to make sure the standby device is DOWN in Azure LB. The AS3 template I use is here: [https://github.com/mikeoleary/azure-aks-kic-cis/blob/master/infra/bigip/baseline-as3.json](https://github.com/mikeoleary/azure-aks-kic-cis/blob/master/infra/bigip/baseline-as3.json)
 
 #### 2. Achieving flow symmetry without SNAT'ing between client and server
 After what feels like months, I have finally I have found [this Microsoft article](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/firewalls/) that shows flow symmetry can be achieved in the following scenario:
