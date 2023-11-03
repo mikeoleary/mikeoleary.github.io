@@ -21,8 +21,7 @@
 title: Michael's tech blog
 email: mi.oleary@f5.com
 description: >- # this means to ignore newlines until "baseurl:"
-  This is a basic tech blog so that I can quickly document solutions for myself, colleagues, and customers.
-  Most of this content will be around F5 technologies: F5 Distributed Cloud, BIG-IP, automation, and Kubernetes integration.
+  Basic tech blog and notes.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: 'https://blog.michaeloleary.net' # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: 
