@@ -28,10 +28,13 @@ I like a cheaper option than ARO for a lab or demo, and also something that I ca
 You need at least 4x subnets in 2x Availability Zones.
 - 2x external subnets with a default route out Internet-Gateway (must be public-facing)
 - 2x internal subnets (don't need to be Internet-facing). 
+You must enable the `enableDnsSupport` and `enableDnsHostnames` attributes in your VPC.
 
 2. [Register for an account](https://www.redhat.com/en/technologies/cloud-computing/openshift) with Red Hat and get access to a [pull secret](https://cloud.redhat.com/openshift/install/pull-secret).
 
-3. Prepare a file called ```install-config.yaml```. I have an example [here](/assets/install-config.yaml){:target="_blank"}. You can see I have pre-filled most values, but you will need to edit at least the following fields: **baseDomain**, **platform>aws>subnets**, **pullSecret**, and **sshKey**.
+3. You will want a public domain name to use. I use `my-f5.com`. I have registered this with GoDaddy and I have this set up as a public hosted zone in AWS, and also as a private hosted zone with the same name. The private hosted zone must be linked to the VPC you have created above.
+
+4. Prepare a file called ```install-config.yaml```. I have an example [here](/assets/install-config.yaml){:target="_blank"}. You can see I have pre-filled most values, but you will need to edit at least the following fields: **baseDomain**, **platform>aws>subnets**, **pullSecret**, and **sshKey**.
 
 {% highlight yaml %}
 baseDomain: my-f5.com #you will need a domain that is hosted in AWS Route53 here.
@@ -49,8 +52,8 @@ sshKey: |
   ssh-rsa xxx...yyy imported-openssh-key #use your own key here to allow you to access the ec2 instances created with ssh.
 {% endhighlight %}
 
-{:start="4"}
-3. Download some binaries from Red Hat here: [https://cloud.redhat.com/openshift/install/aws/user-provisioned](https://cloud.redhat.com/openshift/install/aws/user-provisioned). <br/>You can choose to get the installer for Mac OS or Linux, and the CLI can be downloaded for Mac, Linux, or Windows.
+{:start="5"}
+5. Download two binaries from Red Hat here: [https://cloud.redhat.com/openshift/install/aws/user-provisioned](https://cloud.redhat.com/openshift/install/aws/user-provisioned). <br/>You can choose to get the installer for Mac OS or Linux, and the CLI can be downloaded for Mac, Linux, or Windows.
 * Download the installer (UPI – User provisioned Infrastructure)
 * Also, you'll need to download the client CLI from the same URL above. This gets installed on your laptop and you use it to interact with Openshift.
 
@@ -75,6 +78,7 @@ cp install-config.yaml-backup install_ocp/install-config.yaml
 - Once your cluster build is complete you will see in the logs that your User Interface is ready.
   - the default username is ```kubeadmin``` and the password will be in the logs.
 - Use the ```oc``` utility or the ```kubectl``` command line to authenticate and administer your cluster.
+- you should not need to connect to the ec2 instances via ssh. But if you want to, you should be able to reach them with the username ```core``` and the private key associated with the public key that you entered into the ```install-config.yaml``` file.
 
 #### Destroy the cluster
 

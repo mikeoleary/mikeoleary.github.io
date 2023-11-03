@@ -1,3 +1,4 @@
+additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: my-f5.com
 compute:
