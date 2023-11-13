@@ -5,7 +5,7 @@ date:   2023-10-31 09:00:00 -0400
 categories: Azure
 ---
 
-Yesterday I wrote a [blog post](/azure/2023/10/30/azure-load-balancer-5-tuple.html) with some notes on Azure LB and thought out loud about Azure LB and flow symmetry. I still think it acts more like DAG than a network load balancer.
+Yesterday I wrote a [blog post]({% post_url 2023-10-30-azure-load-balancer-5-tuple %}) with some notes on Azure LB and thought out loud about Azure LB and flow symmetry. I still think it acts more like DAG than a network load balancer.
 
 But after I finished writing I thought about a couple of ideas.
 

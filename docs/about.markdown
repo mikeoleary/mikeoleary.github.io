@@ -4,15 +4,14 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+<img style="float: right; margin:20px; vertical-align: top;" src="/assets/michael_oleary_headshot.jpg" width="200">
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+I'm a Solution Architect at F5 and I love my job. I focus on F5's core strength: application delivery. This usually involves deep-diving into network security, cloud architecture, automation, Linux, Azure, AWS, and Google Cloud. Over time I've specialized in Kubernetes and am now a go-to resource for Kubernetes-related technologies for colleagues. 
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+I'm also the host of the [Boston Kubernetes Meetup](https://www.meetup.com/boston-kubernetes-meetup), and a co-lead of the [Boston chapter](https://community.cncf.io/boston) of the CNCF Community Groups. If you'd like to join us or present at our events, please reach out.
 
+When I'm not working, I mostly enjoy spending time with my wife and two kids. But if I can fit it in, motorcycle riding, soccer, and traveling to see family are favorite activities too.
 
-[jekyll-organization]: https://github.com/jekyll
+### Contact me
+
+[mi.oleary@f5.com](mailto:mi.oleary@f5.com)

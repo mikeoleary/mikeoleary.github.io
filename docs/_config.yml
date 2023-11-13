@@ -27,6 +27,8 @@ url: 'https://blog.michaeloleary.net' # the base hostname & protocol for your si
 #twitter_username: 
 github_username:  mikeoleary
 
+permalink: /:categories/:title/
+
 # Build settings
 theme: minima
 plugins:

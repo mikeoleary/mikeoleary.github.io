@@ -2,7 +2,7 @@
 layout: post
 title:  "Why I'm blogging here"
 date:   2023-10-20 09:30:13 -0400
-categories: introduction
+categories: blogging
 ---
 
 ## How did we end up here?
