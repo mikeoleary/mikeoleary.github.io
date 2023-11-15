@@ -19,6 +19,8 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Michael's tech blog
+tagline: Network security, Kubernetes, cloud architecture and automation blog
+author: Michael O'Leary
 email: mi.oleary@f5.com
 description: >- # this means to ignore newlines until "baseurl:"
   Basic tech blog and notes.
