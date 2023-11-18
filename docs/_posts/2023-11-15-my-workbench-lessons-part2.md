@@ -8,8 +8,12 @@ categories: [blogging]
 ![My new workbench part 2](/assets/workbench-in-driveway2.jpeg)
 
 ### Background
-Yesterday I built a workbench and then [blogged about it]({% post_url 2023-11-14-my-workbench-lessons %}) last night. However I went to bed thinking I could make this better so today I made a few edits.
+This is 3-part blog post:
+* [Part One]({% post_url 2023-11-14-my-workbench-lessons %})
+* [Part Two]({% post_url 2023-11-15-my-workbench-lessons-part2 %})
+* [Part Three]({% post_url 2023-11-17-my-workbench-lessons-part3 %})
 
+Yesterday I built a workbench and then [blogged about it]({% post_url 2023-11-14-my-workbench-lessons %}) last night. However I went to bed thinking I could make this better so today I made a few edits.
 
 ### Edit #1
 Originally I had the "frame" fastened to the table top. Ie., the horizontal 2x4 that joins the tops of the legs on each side was screwed into the plywood. This meant that I needed a small piece of 2x4 to mount the locking hinge onto. 

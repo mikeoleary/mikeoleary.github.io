@@ -8,6 +8,12 @@ categories: [blogging]
 ![My new workbench](/assets/workbench-in-driveway.jpeg)
 
 ### Background
+
+This is 3-part blog post:
+* [Part One]({% post_url 2023-11-14-my-workbench-lessons %})
+* [Part Two]({% post_url 2023-11-15-my-workbench-lessons-part2 %})
+* [Part Three]({% post_url 2023-11-17-my-workbench-lessons-part3 %})
+
 I've recently built a workbench because I got tired of my previous solution, which was an old piece of plywood screwed onto some old A-frame sawhorse legs, pictured below.
 
 ![My previous workbench solution](/assets/workbench-sawhorse.jpeg){:width="300px"}{:style="display:block; margin-left:auto; margin-right:auto"} 
