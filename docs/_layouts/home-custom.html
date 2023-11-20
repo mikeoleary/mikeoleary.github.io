@@ -1,0 +1,91 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <div style="background-image: url('assets/header-image.jpg'); background-repeat: no-repeat; height: 400px; width: 800px; text-align: center; ">
+  <p style="font-size:xx-large; font-weight:900; color:azure; padding: 100px 0px 0px 0px;" >
+    This is engineering
+  </p>
+  <p style="font-size:medium; color:azure" >
+    Tech notes on Kubernetes, cloud architecture, and automation
+  </p>
+  </div>
+
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  {%- if site.posts.size > 0 -%}
+  <h2 class="post-list-heading">{{ page.list_title | default: "Latest Post" }}</h2>
+  <hr />
+  <ul class="post-list">
+    {% for post in site.posts limit:1 %}
+    <li>
+      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+      <span class="post-meta">{{ post.date | date: date_format }}</span>
+      <h3>
+        <a class="post-link" href="{{ post.url | relative_url }}">
+          {{ post.title | escape }}
+        </a>
+      </h3>
+      {%- if site.show_excerpts -%}
+        {{ post.excerpt }}
+      {%- endif -%}
+      <div>{{ post.content |truncatehtml | truncatewords: 60 }}</div>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="post-list-heading">{{ page.list_title | default: "Recent Posts" }}</h2>
+  <hr />
+  <ul class="post-list">
+    {% for post in site.posts offset:1 limit:2 %}
+    <li>
+      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+      <span class="post-meta">{{ post.date | date: date_format }}</span>
+      <h3>
+        <a class="post-link" href="{{ post.url | relative_url }}">
+          {{ post.title | escape }}
+        </a>
+      </h3>
+      {%- if site.show_excerpts -%}
+        {{ post.excerpt }}
+      {%- endif -%}
+      <!-- <div>{{ post.content |truncatehtml | truncatewords: 60 }}</div> -->
+    </li>
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+  {%- endif -%}
+
+
+<!-- 
+  {%- if site.posts.size > 0 -%}
+    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+    <ul class="post-list">
+      {%- for post in site.posts -%}
+      <li>
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        <h3>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        </h3>
+        {%- if site.show_excerpts -%}
+          {{ post.excerpt }}
+        {%- endif -%}
+      </li>
+      {%- endfor -%}
+    </ul>
+
+    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+  {%- endif -%}
+-->
+</div>
+

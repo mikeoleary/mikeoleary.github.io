@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Lessons learned building my own workbench - part 2"
-categories: [blogging]
+categories: ["home projects"]
 #tags: [azure,linux]
 ---
 

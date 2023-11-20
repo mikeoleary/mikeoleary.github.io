@@ -36,7 +36,7 @@ Heath's article series is excellent and delves into detail, and Yossi's article 
 
 ### What's similar between AWS and Azure for SSLO?
 
-1. **Route tables* are what you need to understand to make it all work. The complex stuff (tunnels, endpoints) is abstracted for you. The tunnel set up on your network virtual appliances is usually a once-off set up. But understanding what a route table is in Azure and AWS will take the customer most of the way.
+1. **Route tables** are what you need to understand to make it all work. The complex stuff (tunnels, endpoints) is abstracted for you. The tunnel set up on your network virtual appliances is usually a once-off set up. But understanding what a route table is in Azure and AWS will take the customer most of the way.
 
 2. In both AWS and Azure, if you are using a GWLB, your "pool members" behind the GWLB can be in a different VPC (AWS) or VNET (Azure). To reiterate, we will not use GWLB if we are doing SSLO in Azure, but it's worth knowing that both providers' GWLB offerings allow cross-network load-balancing without peeering the networks.
 

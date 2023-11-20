@@ -6,7 +6,7 @@ categories: openshift
 ---
 
 Like many posts, this one is going to be quick and rough. 
-- Today is Nov 2, 2023, and the [latest release of OpenShift](https://access.redhat.com/support/policy/updates/openshift#dates){:target="_blank"} is cuurently version 4.14.
+- Today is Nov 2, 2023, and the [latest release of OpenShift](https://access.redhat.com/support/policy/updates/openshift#dates){:target="_blank"} is curently version 4.14.
 - If you want a specific version of OpenShift, [click here](https://access.redhat.com/solutions/5149581){:target="_blank"}. 
 
 ### My previous work with Openshift
