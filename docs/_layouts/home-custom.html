@@ -4,13 +4,12 @@ layout: default
 
 <div class="home">
 
-  <div style="background-image: url('assets/header-image.jpg'); background-repeat: no-repeat; height: 400px; width: 800px; text-align: center; ">
-  <p style="font-size:xx-large; font-weight:900; color:azure; padding: 100px 0px 0px 0px;" >
-    This is engineering
-  </p>
-  <p style="font-size:medium; color:azure" >
-    Tech notes on Kubernetes, cloud architecture, and automation
-  </p>
+  <div style="position: relative; text-align: center; color: azure;">
+    <img src="assets/header-image.jpg" alt="This is engineering" style="width:100%;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);font-size:xx-large; font-weight:900; ">
+      <p>This is engineering</p>
+      <p style="font-size:medium; font-weight: normal;">Tech blog on Kubernetes, cloud architecture, and automation</p>
+    </div>
   </div>
 
   {%- if page.title -%}
