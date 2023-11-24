@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Inbound SSLo and AWS notes part 1"
+title:  "Inbound SSLo and AWS notes"
 categories: [aws]
 tags: [aws,sslo]
+description: My first article on F5 SSLo deployed in AWS.
 ---
 
 ### Background

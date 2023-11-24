@@ -3,6 +3,7 @@ layout: post
 title:  "Lessons learned building my own workbench - part 3"
 categories: ["home projects"]
 #tags: [azure,linux]
+description: "Lessons learned and a few pictures, part 3"
 ---
 
 ### Background
