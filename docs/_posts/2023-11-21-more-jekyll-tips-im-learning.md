@@ -29,4 +29,4 @@ For the sake of taking notes, here's what I learned about Jekyll recently
 
 5. I would like the categories page to show a few (perhaps 3) blogs for each category, but then link to a list of *all* posts within that category.
 
-6. I still need to learn how to use the ```{{ post.excerpt }}``` feature within Jekyll, and then go back and add these to my posts.
+6. I still need to learn how to use the ```post.excerpt``` feature within Jekyll, and then go back and add these to my posts.
