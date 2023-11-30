@@ -5,7 +5,10 @@ categories: [aws]
 tags: [aws,sslo]
 description: Brief notes about AWS, SSLO, PA and Fortinet. These are rough notes I made during my first successful deployment of SSLo in AWS using GWLB and Fortinet.
 ---
-
+This is 3-part blog post:
+* [Part One]({% post_url 2023-11-19-aws-sslo-inbound-part1 %}) - intro 
+* [Part Two]({% post_url 2023-11-27-aws-sslo-inbound-part2 %}) - rough notes taken during troubleshooting
+* [Part Three]({% post_url 2023-11-30-aws-sslo-inbound-part3 %}) - working lab overview and conclusion
 
 <!-- begin_excerpt -->
 Since writing my [first post]({% post_url 2023-11-19-aws-sslo-inbound-part1 %}) about setting up SSLo in AWS, I have come to deploy a security device in the service chain and thought to make a few notes.

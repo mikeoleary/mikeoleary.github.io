@@ -5,11 +5,17 @@ categories: [aws]
 tags: [aws,sslo]
 description: My first article on F5 SSLo deployed in AWS.
 ---
+This is 3-part blog post:
+* [Part One]({% post_url 2023-11-19-aws-sslo-inbound-part1 %}) - intro 
+* [Part Two]({% post_url 2023-11-27-aws-sslo-inbound-part2 %}) - rough notes taken during troubleshooting
+* [Part Three]({% post_url 2023-11-30-aws-sslo-inbound-part3 %}) - working lab overview and conclusion
 
 ### Background
+<!-- begin_excerpt -->
 Recently I wrote on article in F5's DevCentral website: [SSLO in public cloud: Azure inbound L3 use case](https://community.f5.com/t5/technical-articles/sslo-in-public-cloud-azure-inbound-l3-use-case/ta-p/318351)
 
 It was a great experience! My customer was a large hospital chain and they were able to follow the article to implement their cloud architecture, and then 2 other enterprise-level customers adopted the architecture after in the weeks after I wrote this article. 
+<!-- end_excerpt -->
 
 One of these customers was directed to my article from someone outside of F5. They decided to implement this and then reached out to me. This is my dream scenario for every article: to actually help real people and hopefully drive more adoption of F5 technologies too. 
 
@@ -24,12 +30,12 @@ I haven't invented anything new here. My colleagues have written 2 articles that
 
 Why am I even going to write another article? I am not sure I will, but if I do it will because I want a nice, simple article that is almost identical to the Azure one I referenced at the beginning of this blog. 
 
-Heath's article series is excellent and delves into detail, and Yossi's article is great for understanding GWLB and F5. But Heath's articles are deeper than my past articles that have seemed to land well with customers looking for a quicker read (assuming they know the details of how these things work). And Yossi's attached demo is now slightly dated (the Terraform version required is old, and BIG-IP images have been updated since his code was written). So I don't think my article will confuse or overlap too much.
+Heath's article series is detaild, and Yossi's article is great intro to GWLB and F5. But Heath's articles are deep and some folks like a quick read. And Yossi's demo code is now out of date and requires updates. So I don't think my article will confuse or overlap too much.
 
 ### What's different about AWS and Azure for F5's SSLo?
-1. **AWS will require that we use GWLB**. Why? Because in with AWS LB options, this is the only one that will *not* perform Destination NAT'ing, which is something we need. In Azure I can use a regular Azure LB (not a Azure GWLB) because I can disable Destination NAT'ing with the Floating IP option. 
+1. **In AWS we will use GWLB**. Why? Because in with AWS LB options, this is the only one that will *not* perform Destination NAT'ing, which is something I want in this scenario. In Azure I can use a regular Azure LB (not a Azure GWLB) because I can disable Destination NAT'ing with the Floating IP option. 
 
-    Actually, I guess strictly speaking we might be able to do *inbound* SSLO with multiple regular AWS ELB's but it would be a PITA because you'd either need a ELB per site (ie, ELB sprawl) or use L7 routing (host header or SNI-based routing) for your inbound traffic. Anyway, we're using AWS GWLB.
+    We aren't *forced* to use GWLB. SSLO in AWS was possible before GWLB was released. We could use multiple ELB's but you'd either need a ELB per site (ie, ELB sprawl) or use L7 routing (host header or SNI-based routing). For HA, we could go Active/Active, remap EIP's, or update a route table like in [my still-popular DevCentral article](https://community.f5.com/t5/technical-articles/deploy-big-ip-in-aws-with-ha-across-az-s-without-using-eip-s/ta-p/291221).
 
 2. **This means we'll have to use tunnels**. AWS GWLB uses Geneve tunnels. In Azure we didnt need to worry about tunnels. (Azure's GWLB uses VXLAN tunnels but that is out of scope.). 
 
@@ -42,7 +48,7 @@ Heath's article series is excellent and delves into detail, and Yossi's article 
 2. In both AWS and Azure, if you are using a GWLB, your "pool members" behind the GWLB can be in a different VPC (AWS) or VNET (Azure). To reiterate, we will not use GWLB if we are doing SSLO in Azure, but it's worth knowing that both providers' GWLB offerings allow cross-network load-balancing without peeering the networks.
 
 ### What does a working AWS lab look like? 
-Here's what I've done using draw.io so far:
+Here's what I've done using Lucidchart so far:
 
 ![AWS SSLo inbound](/assets/AWS-SSLo-inbound-1.png)
 
