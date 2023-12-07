@@ -30,7 +30,7 @@ From here on out, I'll refer to Cross-region load balancer as CRLB.
 
 5. **Other regions**. Your 'backend regional load balancers' can live in any publicly available Azure region. 
 
-6. **Public Only.**. At least at the time of me writing this blog (it's the night of Nov 28, 2023), these are the biggest limitations that jump out at me:
+6. **Public Only.**. At least at the time of me writing this blog, these are the biggest limitations that jump out at me:
    >Cross-region frontend IP configurations are public only. An internal frontend is currently not supported.
 
    and

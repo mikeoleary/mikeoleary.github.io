@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "kubectl commands to remember"
-date:   2023-10-21 09:00:00 -0400
 categories: kubernetes
 ---
 
