@@ -32,7 +32,9 @@ From here on out, I'll refer to Cross-region load balancer as CRLB.
 
 6. **Public Only.**. At least at the time of me writing this blog (it's the night of Nov 28, 2023), these are the biggest limitations that jump out at me:
    >Cross-region frontend IP configurations are public only. An internal frontend is currently not supported.
+
    and
+   
    >Outbound rules aren't supported on Cross-region Load Balancer. For outbound connections, utilize outbound rules on the regional load balancer or NAT gateway.
 
 ### F5 BIG-IP deployments with Azure Cross-region load balancer

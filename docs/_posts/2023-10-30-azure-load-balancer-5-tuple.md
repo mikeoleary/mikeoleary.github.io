@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Azure LB and a few advanced notes"
-date:   2023-10-30 09:00:00 -0400
 categories: Azure
 ---
 

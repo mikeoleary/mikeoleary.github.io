@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Why I'm blogging here"
-date:   2023-10-20 09:30:13 -0400
 categories: blogging
 ---
 
