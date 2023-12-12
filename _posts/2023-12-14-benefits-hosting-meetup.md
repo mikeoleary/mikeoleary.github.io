@@ -47,7 +47,7 @@ Hosting a community or professional meetup is an exercise that I highly recommen
 ### Challenges and advice
 1. **Committment and consistency** will be the difference between those who quit and those who grow a successful community. My first 3-4 events were lucky to get 12 people (I now cap RSVP's at 100). The picture below shows my first event, for which my co-host Tony and I spent *many* hours planning.
 
-![First meetup](/assets/meetup-event-1.jfif){:width="400px"}{:style="display:block; margin-left:auto; margin-right:auto"} 
+   ![First meetup](/assets/meetup-event-1.jfif){:width="400px"}{:style="display:block; margin-left:auto; margin-right:auto"} 
 
 2. **Develop a process** that streamlines your efforts. I started out experimenting with different locations and this meant a lot of new work for every event. Now I use the same location, times, and meeting format every time. I rotate sponsors (mostly to keep it vendor-neutral and fair to everyone) and now I estimate that organizing takes a few hrs per month.
 
