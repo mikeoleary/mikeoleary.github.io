@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Docker install and run hello world"
 categories: Docker
 ---

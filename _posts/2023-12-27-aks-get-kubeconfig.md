@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Quickly get your kubeconfig file"
 categories: [kubernetes]
 tags: [kubernetes]
-description: "Quick notes to copy and grab your kubeconfig file when using hosted clusters" #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "Quick notes to copy and grab your kubeconfig file when using hosted clusters." #this is a custom variable meant for a short description to be displayed on home page
 ---
 <!-- begin_excerpt -->
 Once in a while I need to download or generate a kubeconfig file for a cluster, usually when it's in AKS and I have forgotten, deleted, or otherwise lost my kubeconfig file. Here's some quick notes so I can copy and paste this later.

@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Tips I learned about Jekyll today"
 categories: blogging
 tags: blogging

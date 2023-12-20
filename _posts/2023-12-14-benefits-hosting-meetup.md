@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "The benefits of hosting a Meetup"
 categories: [meetup]
 tags: [meetup]
-description: "This post explains why every engineer can benefit from the experience of hosting a community or professional meetup" #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "This post explains why every engineer can benefit from the experience of hosting a community or professional meetup" #this is a custom variable meant for a short description to be displayed on home page
 ---
 <!-- begin_excerpt -->
 Hosting a community or professional meetup is an exercise that I highly recommend to anyone looking to broaden their network and build new skills. In this post I will list a few of the benefits and learnings I've come across being the organizer of the [Boston Kubernetes Meetup](https://www.meetup.com/boston-kubernetes-meetup).

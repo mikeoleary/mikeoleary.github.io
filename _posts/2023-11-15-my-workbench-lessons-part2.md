@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Lessons learned building my own workbench - part 2"
 categories: ["home projects"]
 #tags: [azure,linux]
-description: "Lessons learned and a few pictures, part 2"
+excerpt: "Lessons learned and a few pictures, part 2"
 ---
 
 ![My new workbench part 2](/assets/workbench-in-driveway2.jpeg)

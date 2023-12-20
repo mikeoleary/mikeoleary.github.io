@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "More tips I learned about Jekyll"
 categories: blogging
 tags: blogging
-description: "These are the tips I've learned to use while blogging with Jekyll this week"
+excerpt: "These are the tips I've learned to use while blogging with Jekyll this week"
 ---
 
 For the sake of taking notes, here's what I learned about Jekyll recently

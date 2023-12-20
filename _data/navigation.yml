@@ -1,0 +1,17 @@
+main:
+  - title: "About"
+    url: /about/
+  - title: "Posts"
+    url: /all-posts/
+  - title: "Categories"
+    url: /categories/
+  - title: "Meetup"
+    url: /meetup/
+  #- title: "Tags"
+  #  url: /tags/
+  #- title: "Pages"
+  #  url: /page-archive/
+  #- title: "Collections"
+  #  url: /collection-archive/
+  #- title: "External Link"
+  #  url: https://google.com

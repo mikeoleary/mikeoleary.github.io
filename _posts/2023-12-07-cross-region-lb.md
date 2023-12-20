@@ -1,10 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Using Azure's Cross-region Load Balancer with F5 BIG-IP"
 categories: azure
 tags: azure
-description: "This post covers the new Azure Cross-region load balancer." 
-
+excerpt: "This post covers the new Azure Cross-region load balancer." 
 ---
 ![This pretty much explains the Azure Cross-Region load balancer](/assets/azure-cross-region-load-balancer.png)
 

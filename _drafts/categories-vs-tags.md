@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Jekyll Categories and Tags"
 categories: [Blog]
 tags: [azure,linux]

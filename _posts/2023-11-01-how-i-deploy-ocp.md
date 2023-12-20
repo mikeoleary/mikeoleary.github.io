@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "How I deploy OpenShift in a hurry"
 date:   2023-11-01 09:00:00 -0400
 categories: openshift

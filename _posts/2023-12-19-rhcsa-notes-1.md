@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Centos and Red Hat notes, part 1"
 categories: [redhat]
 tags: [redhat, centos, linux]
-description: "Unlike Windows Server, which I learned 'from the ground up' by reading textbooks, I've just sort of learned Linux on the job over the years. Now I'm going back to learn the basics: history, fundamentals, and things I've always glossed over." #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "Unlike Windows Server, which I learned 'from the ground up' by reading textbooks, I've just sort of learned Linux on the job over the years. Now I'm going back to learn the basics: history, fundamentals, and things I've always glossed over." #this is a custom variable meant for a short description to be displayed on home page
 ---
 ![Red Hat logo](/assets/red-hat-logo.svg){:style="display:block; margin-left:auto; margin-right:auto"} 
 <hr />

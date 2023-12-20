@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Quickly search for F5 images in Azure and AWS"
 categories: [aws, azure]
 tags: [aws, azure]
-description: "This post contains commands for searching the AWS and Azure VM image marketplaces, so that I can quickly copy and paste next time." #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "This post contains commands for searching the AWS and Azure VM image marketplaces, so that I can quickly copy and paste next time." #this is a custom variable meant for a short description to be displayed on home page
 ---
 <!-- begin_excerpt -->
 This post is solely so I can copy/paste this in future instead of spending 5 mins re-learning this every 6 months.

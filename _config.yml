@@ -20,24 +20,71 @@
 
 title: Michael's tech blog
 tagline: Network security, Kubernetes, cloud architecture and automation blog
-author: Michael O'Leary
+author:
+  name: "Michael O'Leary"
+  avatar: "/assets/headshots/headshot-square.jpg"
+  bio: "Cloud architect" # Note: Markdown is allowed
+  location: "Boston, MA"
+  links:
+  #  - label: "My link"
+  #    icon: "fas fa-fw fa-link"
+  #    url: "https://michaeloleary.net"
+  #  - label: "Twitter"
+  #    icon: "fab fa-fw fa-twitter-square"
+  #    url: "https://twitter.com/oleary_mi"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mikeoleary"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/michael-w-oleary/"
+    - label: "F5 DevCentral"
+      icon: "fas fa-fw fa-link"
+      url: "https://community.f5.com/t5/user/viewprofilepage/user-id/242856"
+  #  - label: "K8s Meetup"
+  #    icon: "fab fa-fw fa-meetup"
+  #    url: "https://www.meetup.com/boston-kubernetes-meetup/"
 email: mi.oleary@f5.com
 description: >- # this means to ignore newlines until "baseurl:"
   Basic tech blog and notes.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: 'https://blog.michaeloleary.net' # the base hostname & protocol for your site, e.g. http://example.com
+url: 'https://michaeloleary.net' # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: 
 github_username:  mikeoleary
 
 permalink: /:categories/:title/
 
 # Build settings
-theme: minima
+#theme: minima
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
 
 excerpt_separator: <!--more-->
 
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      show_date: true
+      layout: single
+      author_profile: false
+      read_time: false
+      comments: false
+      share: true
+      related: true
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: false
+
+search: true
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

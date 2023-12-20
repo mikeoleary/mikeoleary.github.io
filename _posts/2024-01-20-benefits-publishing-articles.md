@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "The benefits of publishing tech articles"
 categories: [meetup]
 tags: [meetup]
-description: "This post explains why I think writing technical articles has many benefits beyond the immediate purpose of specific knowledge sharing." #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "This post explains why I think writing technical articles has many benefits beyond the immediate purpose of specific knowledge sharing." #this is a custom variable meant for a short description to be displayed on home page
 ---
 ![Benefits of technical writing](/assets/benefits-publishing.jpg)
 

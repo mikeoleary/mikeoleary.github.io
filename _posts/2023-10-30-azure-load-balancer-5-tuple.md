@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Azure LB and a few advanced notes"
 categories: Azure
 ---

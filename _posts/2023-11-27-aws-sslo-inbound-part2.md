@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Inbound SSLo and AWS notes - part 2"
 categories: [aws]
 tags: [aws,sslo]
-description: Brief notes about AWS, SSLO, PA and Fortinet. These are rough notes I made during my first successful deployment of SSLo in AWS using GWLB and Fortinet.
+excerpt: Brief notes about AWS, SSLO, PA and Fortinet. These are rough notes I made during my first successful deployment of SSLo in AWS using GWLB and Fortinet.
 ---
 This is 3-part blog post:
 * [Part One]({% post_url 2023-11-19-aws-sslo-inbound-part1 %}) - intro 

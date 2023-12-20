@@ -1,9 +1,9 @@
 ---
-layout: post
+layout: single
 title:  "Inbound SSLo and AWS notes"
 categories: [aws]
 tags: [aws,sslo]
-description: My first article on F5 SSLo deployed in AWS.
+excerpt: My first article on F5 SSLo deployed in AWS.
 ---
 This is 3-part blog post:
 * [Part One]({% post_url 2023-11-19-aws-sslo-inbound-part1 %}) - intro 

@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Put title here"
+title:  "Migrating my Jekyll theme"
 categories: [Blog]
 tags: [azure,linux]
 description: "One sentence description here" #this is a custom variable meant for a short description to be displayed on home page

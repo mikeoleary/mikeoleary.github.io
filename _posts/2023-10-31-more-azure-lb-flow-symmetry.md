@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "More on Azure LB and flow symmetry"
 date:   2023-10-31 09:00:00 -0400
 categories: Azure
