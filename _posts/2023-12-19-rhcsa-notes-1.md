@@ -1,5 +1,6 @@
 ---
 layout: single
+toc: true
 title:  "Centos and Red Hat notes, part 1"
 categories: [redhat]
 tags: [redhat, centos, linux]
@@ -7,7 +8,9 @@ excerpt: "Unlike Windows Server, which I learned 'from the ground up' by reading
 ---
 ![Red Hat logo](/assets/red-hat-logo.svg){:style="display:block; margin-left:auto; margin-right:auto"} 
 <hr />
-<br/>
+[Part 1]({% post_url 2023-12-19-rhcsa-notes-1 %})<br/>
+[Part 2]({% post_url 2023-12-28-rhcsa-notes-2 %})<br/>
+<hr />
 <!-- begin_excerpt -->
 I've decided to take the exams for Red Hat Certified Systems Administrator (RHCSA) and Red Hat Certified Engineer (RHCE). I've been meaning to do this for 10 or 15 years! This post is just notes for myself. 
 
@@ -17,12 +20,14 @@ I've decided to take the exams for Red Hat Certified Systems Administrator (RHCS
 <hr />
 
 ### Users, passwords, etc.
+- **list users**. This can be done with ```more /etc/passwd```. The output of this includes username, password, UID, GID, User Details (eg first name), home directory, and default shell. You could also use ```getent passwd``` since getent is a tool that searches databases on the system, like *hosts* and *services*, and [others](https://www.liquidweb.com/kb/list-users-centos-7/).
 - **create user**. This will create a user named **john** with a uid/gid of 2000
   - ```sudo useradd -u 2000 john```
   - ```sudo passwd john``` #enter password for john here
 - **set password validity for user**. The ```chage``` command fordes users to change passwords to comply with password-aging policies
   - ```sudo chage -l john``` #the -l flag will list the password expiry date, date of last password set, and other info for a user
   - ```sudo chage -E $(date -d +30days +%Y-%m-%d)``` # the -E flag will set a date to expire their password
+  - Nice reference: [https://www.redhat.com/sysadmin/password-expiration-date-linux](https://www.redhat.com/sysadmin/password-expiration-date-linux)
 - **change password**. ```passwd```
 - **change root password**. ```sudo passwd root```
 - **change root password when you don't have sudo privilege**. You need physical access to machine.
@@ -104,7 +109,7 @@ sudo yum install policycoreutils policycoreutils-python setools setools-console 
 - **disabled vs enforcing**<br/>
 The file ```/etc/selinux/config``` should have ```SELINUX=enforcing``` or ```permissive``` or ```disabled``` (editing this file and rebooting is the way to ensure that the mode will persist after reboot)
 - ```getenforce``` - this command will tell you which mode you are in
-- ```sudo etenforce 0``` for permissive or ```sudo setenforce 1``` for enforcing (does not persist after reboot)
+- ```sudo setenforce 0``` for permissive or ```sudo setenforce 1``` for enforcing (does not persist after reboot)
 - ```sestatus``` to check status of SE Linux
 
 ### Apache

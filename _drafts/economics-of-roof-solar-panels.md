@@ -1,16 +1,10 @@
 ---
 layout: single
-title:  "Migrating my Jekyll theme"
+title:  "Put title here"
 categories: [Blog]
 tags: [azure,linux]
 description: "One sentence description here" #this is a custom variable meant for a short description to be displayed on home page
 ---
-I learned about Table of Contents in Minimal Mistakes. Example page here: https://mmistakes.github.io/minimal-mistakes/layout-table-of-contents-post/. All I need to do is add to my front matter:
-
-```yaml
-toc: true
-```
-
 <!-- begin_excerpt -->
 <!-- end_excerpt -->
 

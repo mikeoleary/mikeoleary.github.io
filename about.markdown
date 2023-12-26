@@ -12,9 +12,13 @@ I'm a Solution Architect at F5 and I love my job. My work revolves around F5's c
 
 Over time I've specialized in Kubernetes and am now a go-to resource for Kubernetes-related technologies for colleagues. 
 
+### Meetup
 I'm also the host of the [Boston Kubernetes Meetup](https://www.meetup.com/boston-kubernetes-meetup), and a co-lead of the [Boston chapter](https://community.cncf.io/boston) of the CNCF Community Groups. If you'd like to join us or present at our events, please reach out.
 
-When I'm not working, I mostly enjoy spending time with my wife and two kids. But if I can fit it in, motorcycle riding, soccer, and traveling to see family are favorite activities too.
+### About this site
+Occasionally I post an article to document how I configured this tech blog. This site is hosted using [GitHub Pages](https://pages.github.com/) and [Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll), which means it's free, git-based, and has a large community of support. 
+
+Like all systems, documentation is key to supportability. Posts in the 'blogging' category have notes of almost everything I've done to set up this site.
 
 ### Contact me
 

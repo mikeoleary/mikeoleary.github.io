@@ -24,7 +24,7 @@ feature_row:
   - image_path: assets/splash-page/tech-blog.jpg
     alt: "All posts"
     title: "All posts"
-    excerpt: "Kubernetes, cloud, automation, and other professional topics"
+    excerpt: "Kubernetes, cloud, automation"
     url: "/all-posts/"
     btn_label: "Read More"
     btn_class: "btn--primary"
@@ -32,7 +32,7 @@ feature_row:
     #image_caption: "Image courtesy of [Unsplash](https://unsplash.com/)"
     alt: "Community"
     title: "Community"
-    excerpt: "Boston Kubernetes Meetup, CNCF Boston chapter, and other community activities"
+    excerpt: "Boston Kubernetes Meetup"
     url: "/meetup/"
     btn_label: "Read More"
     btn_class: "btn--primary"
@@ -43,6 +43,14 @@ feature_row:
     btn_label: "Read More"
     btn_class: "btn--primary"
 ---
+<!--
 {% include feature_row id="intro" type="center" %}
+-->
+Welcome to my tech blog!
 
+The purpose here is to **take notes** and **share learning** about cloud architecture, Kubernetes, automation, and other technology.
+
+Questions? Feedback? Please reach out!
+
+<hr>
 {% include feature_row  %}
