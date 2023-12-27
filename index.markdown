@@ -14,12 +14,6 @@ header:
   #    url: "https://github.com/mmistakes/minimal-mistakes/"
   #caption: "Photo credit: [**Pexels**](https://www.pexels.com/photo/prosthetic-arm-on-blue-background-3913025/)"
 excerpt: "Tech blog on Kubernetes, cloud architecture, and automation."
-intro:
-  - excerpt: >-
-     Welcome to my tech blog.<br/>
-     <br/>
-     The purpose here is to **take notes** and **share learning**. Most of this blog will revolve around cloud architecture, Kubernetes, automation, and related technologies.<br/>
-     <br/>
 feature_row:
   - image_path: assets/splash-page/tech-blog.jpg
     alt: "All posts"
@@ -43,9 +37,7 @@ feature_row:
     btn_label: "Read More"
     btn_class: "btn--primary"
 ---
-<!--
-{% include feature_row id="intro" type="center" %}
--->
+
 Welcome to my tech blog!
 
 The purpose here is to **take notes** and **share learning** about cloud architecture, Kubernetes, automation, and other technology.
