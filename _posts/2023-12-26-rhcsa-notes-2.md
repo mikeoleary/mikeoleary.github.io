@@ -9,7 +9,7 @@ excerpt: "Unlike Windows Server, which I learned 'from the ground up' by reading
 ![Red Hat logo](/assets/red-hat-logo.svg){:style="display:block; margin-left:auto; margin-right:auto"} 
 <hr />
 [Part 1]({% post_url 2023-12-19-rhcsa-notes-1 %})<br/>
-[Part 2]({% post_url 2023-12-28-rhcsa-notes-2 %})<br/>
+[Part 2]({% post_url 2023-12-26-rhcsa-notes-2 %})<br/>
 <hr />
 <!-- begin_excerpt -->
 I've decided to take the exams for Red Hat Certified Systems Administrator (RHCSA) and Red Hat Certified Engineer (RHCE). I've been meaning to do this for 10 or 15 years! This post is just notes for myself. 
