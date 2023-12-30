@@ -2,7 +2,7 @@
 layout: single
 title:  "Quickly get your kubeconfig file"
 categories: [kubernetes]
-tags: [kubernetes]
+tags: [kubernetes, azure, aws, aks, eks, gke]
 excerpt: "Quick notes to copy and grab your kubeconfig file when using hosted clusters." #this is a custom variable meant for a short description to be displayed on home page
 ---
 <!-- begin_excerpt -->

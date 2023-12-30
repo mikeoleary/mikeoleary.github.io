@@ -1,7 +1,8 @@
 ---
 layout: single
 title:  "Azure LB and a few advanced notes"
-categories: Azure
+categories: azure
+tags: azure
 ---
 
 I deal with Azure Load Balancer a lot, and occasionally the Azure Gateway Load Balancer (GWLB) and, once in a while, other PaaS offerings like Application Gateway. I've written a handful of articles over the last few years that focused on or included Azure Load Balancer. The most popular seem to be these 2:

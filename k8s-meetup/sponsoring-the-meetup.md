@@ -1,5 +1,4 @@
 ---
-#layout: page
 layout: single
 title:  "Sponsoring the Meetup"
 permalink: meetup/sponsoring-the-meetup

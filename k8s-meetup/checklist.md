@@ -1,5 +1,4 @@
 ---
-#layout: page
 layout: single
 title:  "Checklist"
 permalink: meetup/sponsor-checklist

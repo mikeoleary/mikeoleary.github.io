@@ -2,6 +2,7 @@
 layout: single
 title:  "kubectl commands to remember"
 categories: kubernetes
+tags: kubernetes
 ---
 
 ## Easy kubectl commands

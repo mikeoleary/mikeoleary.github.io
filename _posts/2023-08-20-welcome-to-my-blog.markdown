@@ -2,6 +2,7 @@
 layout: single
 title:  "Why I'm blogging here"
 categories: blogging
+tags: blogging
 ---
 
 ## How did we end up here?

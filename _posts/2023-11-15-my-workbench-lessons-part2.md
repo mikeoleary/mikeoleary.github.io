@@ -2,7 +2,7 @@
 layout: single
 title:  "Lessons learned building my own workbench - part 2"
 categories: ["home projects"]
-#tags: [azure,linux]
+tags: ["home projects"]
 excerpt: "Lessons learned and a few pictures, part 2"
 ---
 

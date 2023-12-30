@@ -2,6 +2,7 @@
 layout: single
 title:  "Argh. BIG-IP IPSEC VPN to AWS TGW"
 categories: BIG-IP
+tags: [big-ip, aws]
 ---
 
 Sorry in advance. This is a rushed post intended for rough note taking for myself.

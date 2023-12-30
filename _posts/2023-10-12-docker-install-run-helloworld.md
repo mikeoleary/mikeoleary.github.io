@@ -1,7 +1,8 @@
 ---
 layout: single
 title:  "Docker install and run hello world"
-categories: Docker
+categories: docker
+tags: docker
 ---
 
 This is purely for my own note taking

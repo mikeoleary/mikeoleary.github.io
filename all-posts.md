@@ -1,5 +1,6 @@
 ---
 layout: home
 permalink: /all-posts/
-title: All Posts
+#title: All Posts
+author_profile: true
 ---

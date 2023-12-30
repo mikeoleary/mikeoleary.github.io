@@ -1,5 +1,4 @@
 ---
-#layout: page
 layout: single
 title:  "Boston Kubernetes Meetup"
 permalink: meetup/
