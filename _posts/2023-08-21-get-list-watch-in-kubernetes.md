@@ -77,14 +77,16 @@ I'll just reference the documentation here: [Determine the Request Verb](https:/
 
 This part was interesting:
 
-<p>The get, list and watch verbs can all return the full details of a resource.</p>{: .notice--warning}
+<p>The get, list and watch verbs can all return the full details of a resource.</p>{: .notice}
+
+It's pretty easy to understand how `get` and `list` are different if you've made API calls before, but what is involved with `watch` ?
 
 ### How is watch special?
 In this article I only want to focus on ```watch``` and how it's different from ```get``` and ```list```.
 
-I have always known that CIS "subscribes" to the Kubernetes API to "watch" for changes to objects, but I naively just assumed that CIS and other operators made frequent API calls in the style of HTTP GET requests. 
+I have always known that CIS "subscribes" to the Kubernetes API to "watch" for changes to objects, but I naively just assumed that CIS and other operators made frequent API calls in the style of HTTP GET requests. I.e., I thought "watching" meant "frequent getting or listing".
 
-Of course this would be inefficient after giving it even a few seconds of thought, and today I started thinking about what "subscribe" really means. After searching for only a minute or two I read this nice sentence from a StackOverflow [answer](https://stackoverflow.com/a/58160692/8913988):
+Of course this would be inefficient, and today I started thinking about what "subscribe" really means. After searching for only a minute or two I read this nice sentence from a StackOverflow [answer](https://stackoverflow.com/a/58160692/8913988):
 
 > watch is a special verb that gives you permission to see updates on resources in real time. 
 
@@ -92,12 +94,46 @@ Reading [another answer](https://stackoverflow.com/a/58165061/8913988), I see
 
 > They open a streaming connection that returns you the full manifest of a Deployment whenever it changes (or when a new one is created).
 
-### Let's find the answer in official documentation
+### Efficient detection of changes
 Now I get it! With words like "real time" and "stream" I realized I should find what I'm looking for in the official documentation, and of course it's right here: [Efficient detection of changes](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes)
 
 > When you send a watch request, the API server responds with a stream of changes.
 
-You can read the documentation further for the sequence of API calls that need to be made (a watch is like a get but with ?watch=true). K8s client instrumentations like Go and Java handle this for developers, and that's something outside of my current concerns.
+You can read the documentation further for the sequence of API calls that need to be made, but here's a nice summary:
+1. Here is an initial ```get``` for all pods in the test namespace. Notice the "resourceVersion" returned in line 9.
+   ```bash
+   GET /api/v1/namespaces/test/pods
+   ---
+   200 OK
+   Content-Type: application/json
+
+   {
+     "kind": "PodList",
+     "apiVersion": "v1",
+     "metadata": {"resourceVersion":"10245"},
+     "items": [...]
+   }
+   ```
+2. Here is a followup request with `watch=1` and `resourceVersion` request parameters. Notice this response has `Transfer-Encoding: chunked` to indicate that this is a [long-running streaming connection](https://en.wikipedia.org/wiki/Chunked_transfer_encoding) and more data will be sent from server to client.
+   ```bash
+   GET /api/v1/namespaces/test/pods?watch=1&resourceVersion=10245
+   ---
+   200 OK
+   Transfer-Encoding: chunked
+   Content-Type: application/json
+
+   {
+     "type": "ADDED",
+     "object": {"kind": "Pod", "apiVersion": "v1", "metadata": {"resourceVersion": "10596", ...}, ...}
+   }
+   {
+     "type": "MODIFIED",
+     "object": {"kind": "Pod", "apiVersion": "v1", "metadata": {"resourceVersion": "11020", ...}, ...}
+   }
+   ...
+   ```
+
+K8s client instrumentations like Go and Java handle this for developers, and that's something outside of my current concerns. For some other time, [here](https://kubernetes.io/docs/reference/#officially-supported-client-libraries) is a list of officially supported client libraries to call the Kubernetes API.
 
 I'll quote another [nice article](https://www.baeldung.com/java-kubernetes-watch):
 
