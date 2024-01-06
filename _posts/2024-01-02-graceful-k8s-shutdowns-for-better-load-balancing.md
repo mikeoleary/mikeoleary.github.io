@@ -9,7 +9,7 @@ toc: true
 ### Summary
 When pods are removed from Kubernetes services, there is a short time window when requests may still be routed to them by ingress controllers, external load balancers, or other components. This can result in failed requests. 
 
-As Kubernetes admins, we can make small changes to make rolling upgrades more graceful for end users. We will focus on the `PreStop` hook and the `terminationGracePeriodSeconds` pod setting.
+As Kubernetes admins, we can make small changes to make rolling upgrades more graceful for end users. We will focus on the `PreStop` hook and the `terminationGracePeriodSeconds` pod setting, and why this is probably more important for external load balancers than ingress controllers.
 
 ### Covering the basics
 
@@ -25,29 +25,43 @@ It's important to know about [liveness, readiness, and startup probes](https://k
 ### How requests reach pods
 When requests are sent to new pods in Kubernetes via proxies such as external load balancers or ingress controllers, these proxies must be configured with the IP address of each pod in the exposed service[^1]. Likewise, they must be updated if the pod IP addresses change, such as when deployments are scaled in/out or when Kubernetes replaces a failed pod with a new one. And again, when a pod's lifecycle is complete - whether the reason is a completed task or a rolling update - the pod's IP address must be removed from the proxy.
 
-I've used the term *proxy* to generally refer to ingress controllers, external load balancers, and operators that subscribe to the Kubernetes API server and watch for changes to Kubernetes services[^2]. In this post I'll use three examples of proxies that I know pretty well:
-- NGINX Ingress Controller: *an ingress controller*
+I've used the term *proxy* to generally refer to ingress controllers, external load balancers, and operators that subscribe to the Kubernetes API server and watch for changes to Kubernetes services[^2]. In this post I'll use a few examples of proxies that I know pretty well:
+- Two ingress controllers
+  - Community ingress controller: *an ingress controller developed and maintained by the community*
+  - NGINX Ingress Controller: *an ingress controller developed by NGINX developers*
 - F5 Distributed Cloud (XC) Customer Edge(CE): *can act as external load balancer* [^3]
 - F5 Container Ingress Services (CIS): *an operator that updates a BIG-IP device outside the cluster*
 
-#### Ingress Controller
-Ingress controllers typically run as a set of pods that use a Service Account (SA). This SA has a ClusterRole that allows it to get, list, and [watch](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) Services and Endpoints. Because an ingress controller is a pod itself and is watching the Kubernetes API closely and reconfiguring itself immediately, the time lapse between an endpoint being removed and the proxy configuration being updated is very short.
+#### Ingress Controllers
+Firstly, there's two ingress controllers which are [often confused](https://www.nginx.com/blog/guide-to-choosing-ingress-controller-part-4-nginx-ingress-controller-options/) because they have similar names. 
+- The **community ingress controller** is developed by the community, hosted at [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx), with docs on [kubernetes.io](https://kubernetes.io). It is based on NGINX Open Source, but the company NGINX doesn't control it (although there is a commitment from F5 NGINX to support that project).
+- The **NGINX version** is found at [nginxinc/kubernetes-ingress](https://github.com/nginxinc/kubernetes-ingress), developed and maintained by F5 NGINX with docs on [docs.nginx.com](https://docs.nginx.com). Because NGINX is the custodian of this open source project, they control the development philosophy of production readiness, backward compatibility, security, no third party modules, and enterprise support.
+
+Because an ingress controller is a pod itself and is watching the Kubernetes API closely and reconfiguring itself immediately, the time lapse between an endpoint being removed and the proxy configuration being updated is very short.
 
 {% include figure image_path="/assets/k8s-graceful-shutdowns/ic-high-level.png" alt="Ingress Controller" caption="An ingress controller runs in a pod itself and queries kube api from within the cluster, reconfiguring itself dynamically. From [How NGINX Ingress Controller is Designed](https://docs.nginx.com/nginx-ingress-controller/overview/design/) " %}
+
+##### Real world ingress controller use cases
+If you search the web, you'll find folks that implemented the `PreStop` hook to overcome instances where an ingress controller had a stale config because backend apps started shutting down at the same time as they were removed from endpoints.
+
+I spoke to a Product Manager from NGINX about the `PreStop` hook and he told me that he's never heard about anyone needing to do this for NGINX's own ingress controller (however, he could not speak for the community version or other ingress controllers). NGINX's ingress controller dynamically updates it's own configuration so quickly that it's almost not possible for terminating pods to exist as upstream pool members in NGINX.
 
 #### External load balancer
 An F5 XC CE device can use a Service Account to authenticate to the Kubernetes API server from outside of the cluster. I've [written](https://community.f5.com/t5/technical-articles/using-a-kubernetes-serviceaccount-for-service-discovery-with-f5/ta-p/300225) about this before. In this setup, the CE can configure itself to load balance incoming requests directly to pod IP addresses within a cluster. Users can send requests to this device (or any device on the mesh from which the site is advertised) and their request will be proxied directly to a pod's IP address.
 
 {% include figure image_path="/assets/k8s-graceful-shutdowns/XC-K8s-ServiceDiscovery.png" alt="External Load Balancer" caption="An external load balancer using Service Account authentication to query kube api and load balance traffic to pods." %}
 
-Depending on the latency of API calls from external LB to cluster API server, there may be a slightly longer time lapse between a pod's termination and the load balancer learning about this.
+Depending on the latency of API calls from external LB to cluster API server, there may be a slightly longer time lapse between a pod's termination and the load balancer learning about this. 
 
-#### Operator
+#### Operator and external load balancer
 F5 CIS is an enterprise-level operator and a good example of real-world complexities faced by large companies. CIS runs as a container within a cluster and subscribes to the Kubernetes API, just like other clients. However, unlike an ingress controller that configures itself, upon learning of changes to endpoints CIS will send an API call to an F5 BIG-IP device that is *outside* of the cluster. 
 
 {% include figure image_path="/assets/k8s-graceful-shutdowns/cis-high-level.png" alt="F5 Container Ingress Services" caption="CIS runs inside the cluster but sends API calls to configure BIG-IP, an external load balancer." %}
 
-This operation (API calls pictured in blue) is very fast. Sometimes, changes are purposefully batched by CIS and sent at a configured frequency, such as every 30 seconds (in environments with many busy applications, for example). If this were the case, an external BIG-IP may not know about a terminated pod for up to 30 seconds, plus whatever processing time the API calls require.
+The API calls pictured in blue are made very quickly after CIS learns of changes to endpoints, but the time for BIG-IP to apply the configuration required can be a few seconds. It's also possible to batch these API calls with the `--as3-post-delay` [argument](https://clouddocs.f5.com/containers/latest/userguide/config-parameters.html#as3-parameters), which will increase the delay between changes to endpoints and proxy updates.
+
+**Important!** This is the scenario that is most likely to require a `PreStop` hook. Since the BIG-IP must receive API calls from an operator, but mostly because large configuration updates may take a few seconds, this is the architecture most vulnerable to the asynchronous nature of Kubernetes endpoint updates.
+{: .notice--warning}
 
 ### Why do we need to make shutdowns more graceful?
 The main reason is because of how [rolling updates](https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/) work, which is the [default strategy](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec) for deployment updates.
@@ -118,6 +132,7 @@ Many of the same rules apply for configuration of Kubernetes as in traditional e
 - [Kubernetes best practices: terminating with grace](https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace). This nice summary of events is a clear overview of the pod termination lifecycle.
 - [Graceful Shutdown with Lifecycle preStop Hook](https://www.datree.io/resources/kubernetes-guide-graceful-shutdown-with-lifecycle-prestop-hook). Another good article on best practices with PreStop hooks.
 - [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) documentation.
+- [pod-graceful-drain](https://github.com/foriequal0/pod-graceful-drain) - here's another clever hack: intercept pod deletion API calls and isolate a pod instead of terminating it. This is for further reading if interested.
 
 [^1]: This is true for services of type ClusterIP and LoadBalancer, where the load balancer is aware of individual pod IP addresses. This is not true for services of type NodePort, where the load balancer will direct traffic only to node IP addresses.
 [^2]: There are also other components within Kubernetes that do not proxy traffic, but must subscribe to changes to endpoints. For example, CoreDNS must keep track of IP addresses for [headless services](https://kodekloud.com/blog/kubernetes-headless-service/), and the [Cloud Controller Manager](https://kubernetes.io/docs/concepts/architecture/cloud-controller/) will need to know pod IP addresses in order to update cloud load balancers. 
