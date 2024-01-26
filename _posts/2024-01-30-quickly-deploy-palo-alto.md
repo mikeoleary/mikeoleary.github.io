@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Quickly deploy a Palo Alto VM in Azure with this ARM template"
+title:  "Quickly deploy a Palo Alto VM in Azure"
 categories: [azure]
 tags: [palo-alto]
 excerpt: "After too many one-off ARM templates, I'm documenting a simple and reusable ARM template for myself. Use this when deploying a PA firewall in Azure." #this is a custom variable meant for a short description to be displayed on home page
