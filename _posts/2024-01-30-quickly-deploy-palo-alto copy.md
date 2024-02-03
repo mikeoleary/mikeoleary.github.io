@@ -11,7 +11,7 @@ This is a simple ARM template to deploy a Palo Alto VM into an existing VNET.
 - have a VNET in an existing resource group deployed already, with at least 3 subnets.
 - deploy with the button below:
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2Fmikeoleary%2Fbb5e7d2e5baafa2eccd59e3430b194cb%2Fraw%2Fgistfile1.txt)
+[![Deploy to Azure](/assets/deploy-PA-ARM-template/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2Fmikeoleary%2Fbb5e7d2e5baafa2eccd59e3430b194cb%2Fraw%2Fgistfile1.txt)
 
 
 #### ARM template
