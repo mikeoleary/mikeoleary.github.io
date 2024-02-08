@@ -20,10 +20,10 @@ This post is solely so I can copy/paste this in future instead of spending 5 min
     az vm image list --publisher f5-networks --offer f5-big-ip-best --location eastus2 --all | jq .[].sku
 
     #get all versions within a sku
-    az vm image list --publisher f5-networks --offer f5-big-ip-best --sku f5-bigip-virtual-edition-200m-best-hourly --location eastus2 --all | jq .[].version
+    az vm image list --publisher f5-networks --offer f5-big-ip-best --sku f5-big-best-plus-hourly-25mbps --location eastus2 --all | jq .[].version
 
     #get a specific image
-    az vm image list --publisher f5-networks --offer f5-big-ip-best --sku f5-bigip-virtual-edition-200m-best-hourly --location eastus2 --all
+    az vm image list --publisher f5-networks --offer f5-big-ip-best --sku f5-big-best-plus-hourly-25mbps --location eastus2 --all
 
 {% endhighlight %}
 
