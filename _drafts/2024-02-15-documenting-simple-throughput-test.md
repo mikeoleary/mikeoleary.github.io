@@ -10,6 +10,9 @@ This is a basic outline of my current testing of throughput for cloud-based appl
 
 ![BIG-IP testing](/assets/throughput-testing-in-cloud/testing-architecture1.png)
 
+##### AZ's in Azure
+After deploying this I remembered AZ's in Azure are transparent. I had deployed my 2x Ubuntu VM's in AZ 1, but my 2x BIG-IP VM's were "non-zonal", meaning they had no AZ assigned, just the region. I haven't found official docs from Microsoft but based on reading, this means an internal Azure allocator tool can assign my BIG-IP VM's to an AZ when I start them up. I want all my VM's in the same AZ, so I [migrated my BIG-IP VM's to AZ 1 manually](https://learn.microsoft.com/en-us/azure/site-recovery/move-azure-vms-avset-azone). Now all VM's are in AZ 1.
+
 ### BIG-IP througput testing
 I am testing the throughput of F5 BIG-IP virtual machines, different drivers, and different configurations. 
 
@@ -38,7 +41,9 @@ You probably should not test this without advice/help from an F5 engineer. I'm u
 ```
 iperf -c 10.0.1.4 -w 8m -P 64
 ```
-- When traversing BIG-IP with no tuning (default driver, default queue size, Perf L4 VIP, etc) I get about 5 Gbps. This is now my baseline and I have several variables to tweak. Updates to come on this. I plan to test drivers, queue length, VS type, and maybe TCP profile settings on BIG-IP.
+- When traversing BIG-IP with no tuning (default driver, default queue size, Perf L4 VIP, etc) I get about 5 Gbps. This is now my baseline and I have several variables to tweak. I plan to test drivers, queue length, VS type, and maybe TCP profile settings on BIG-IP.
+
+Updates to come on this.
 
 #### Interesting notes so far
 - the `-P` for parallelism makes a difference because a single tcp stream throughput does not seem to achieve as much as multiple streams. 
@@ -49,6 +54,18 @@ iperf -c 10.0.1.4 -w 8m -P 64
 #### Handy links worth noting:
 - https://fasterdata.es.net/performance-testing/network-troubleshooting-tools/iperf/multi-stream-iperf3/
 - https://netbeez.net/blog/tcp-window-size/
+
+### Update: new testing architecture
+I just realized I can save a few $ running this lab by using 1x Ubuntu VM with 2x NIC's.
+- I have added a second NIC to my Ubuntu1 VM, with an IP of `10.0.1.5`
+- I run `iperf -s -w 8m -B 10.0.1.5` in one terminal
+- I run `iperf -c 10.0.0.101 -w 8m -P 64 -B 10.0.0.4` in another terminal
+
+This way I can shut down my Ubuntu2 VM, as in the diagram below:
+
+![BIG-IP testing 2](/assets/throughput-testing-in-cloud/testing-architecture2.png)
+
+
 
 
 
