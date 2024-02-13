@@ -61,7 +61,7 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
 
-#excerpt_separator: <!--more-->
+excerpt_separator: <!--more-->
 
 defaults:
   # _posts
