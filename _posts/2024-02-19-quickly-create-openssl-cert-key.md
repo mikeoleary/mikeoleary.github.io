@@ -7,9 +7,9 @@ excerpt: "I can never remember this one-liner so here it is to bookmark." #this 
 ---
 Here's a one-liner for generating a self-signed certificate. This is primarily for me to quickly find when I cannot remember the openssl command line.
 
-### 
-- key length is 2048
+### Requirements / info
 - requires openssl
+- key length is 2048
 - cert validity is 365 days
 
 ````
