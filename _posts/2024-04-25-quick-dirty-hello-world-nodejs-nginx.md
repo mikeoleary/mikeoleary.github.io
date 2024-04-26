@@ -1,64 +1,71 @@
 ---
 layout: single
-title:  "Google LB and Proxy Protocol demo using NGINX, NodeJS"
+title:  "Google LB and PROXY protocol demo using NGINX"
 categories: [nginx]
 tags: [nginx, nodejs]
-excerpt: "This started as a quick and dirty demo to show NGINX and Proxy Protocol, and turned into a Node JS web app that I'll re-use one day." #this is a custom variable meant for a short description to be displayed on home page
+excerpt: "This started as a quick and dirty demo to show NGINX and PROXY protocol, and turned into a Node JS web app that I'll re-use one day." #this is a custom variable meant for a short description to be displayed on home page
 toc: true
 ---
-Recently I was talking to a customer who wanted to know what their options were in Google cloud for deploying devices behind load balancers with Google. This is a brief overview of their requirements, and a small demo.
+Recently a customer asked about their options in Google cloud with global load balancers. This is a brief overview of their requirements, and a small demo showcasing the power of PROXY protocol.
 
-### Customer requirements:
-
->1. We have VM's running applications in Google Cloud.
-2. We want a **global** load balancer. 
+### Customer requirements: 
+- We have F5 VM's running in Google Cloud, providing WAF services.
+- We want a **global** load balancer
     - i.e, we want a public IP address advertised via Anycast from each of Google's front end locations.
-3. We want to know the **true source IP** of clients when they reach our web server.
-4. We do **not** want to use an Application Load Balancer
-    - i.e., we **do not** want to perform TLS decryption within a Google LB. 
+- We want to know the **true source IP** of clients when they reach our WAF.
+- We do **not** want to use an Application Load Balancer in Google
+    - i.e., we **do not** want to perform TLS decryption within a Google LB for HTTP/HTTPS load balancing.
     - therefore we **cannot** use X-Forwarded-For headers to preserve true source IP
-5. Additionally, we'd like to use Cloud Armor. Please let us know if/how we can add on a CDN/DDoS/WAF provider.
+- Additionally, we'd like to use Cloud Armor. Please let us know how we can add on a CDN/DDoS/WAF provider.
+{: .notice}
 
-### Let's start with Google Load Balancers
+### Which load balancer type fits best?
 
-[This guide](https://cloud.google.com/load-balancing/docs/choosing-load-balancer) shows us several options for Google LB's. Because our requirements include **global, TCP-only** load balacing, we will choose the highlighted LB type of "Global external proxy Network Load Balancer".
+[This guide](https://cloud.google.com/load-balancing/docs/choosing-load-balancer) outlines our options for Google LB's. Because our requirements include **global, TCP-only** load balacing, we will choose the highlighted LB type of "Global external proxy Network Load Balancer".
 
 <figure>
     <a href="/assets/gcp-tcp-global-lb/lb-product-tree-annotated.png"><img src="/assets/gcp-tcp-global-lb/lb-product-tree-annotated.png"></a>
-    <figcaption>Choosing a Google Load Balancer.</figcaption>
+    <figcaption>Our requirements of global + TCP-only determine our load balancer type.</figcaption>
 </figure>
 
-#### What about proxying vs passthrough?
+#### Proxy vs Passthrough
 
-Notice that global LB's **proxy** traffic. They do not preserve source IP address as a **passthrough** LB does. This is because global IP addresses are advertised  from globally-distributed [front end locations](https://cloud.google.com/docs/security/infrastructure/design#google-frontend-service). 
+Notice that global LB's *proxy* traffic. They do not preserve source IP address as a *passthrough* LB does. This is because global IP addresses are advertised  from globally-distributed [front end locations](https://cloud.google.com/docs/security/infrastructure/design#google-frontend-service). 
 
-Proxying will maintain traffic symmetry, but Source NAT causes loss of the original client IP address. Fortunately, we can overcome this with Proxy protocol.
+Proxying from these locations allows traffic symmetry, but Source NAT causes loss of the original client IP address. Fortunately, we can overcome this with PROXY protocol.
 
-#### Proxy Protocol support with Google Load Balancers
+#### PROXY protocol support with Google load balancers
 
-The [documentation](https://cloud.google.com/load-balancing/docs/tcp#target-proxies) for TCP load balancers says it all:
+Google's TCP LB [documentation](https://cloud.google.com/load-balancing/docs/tcp#target-proxies) outlines our challenge and solution:
 
 >By default, the target proxy does not preserve the original client IP address and port information. You can preserve this information by enabling the PROXY protocol on the target proxy.
 
-Without Proxy protocol support, we could only meet 2 of our core 3 requirements with a given solution. Proxy protocol allows us to meet all 3 simultaneously.
+Without PROXY protocol support, we could only meet 2 of 3 core requirements with any given load balancer type. PROXY protocol allows us to meet all 3 simultaneously.
 <figure>
     <a href="/assets/gcp-tcp-global-lb/gcp-lb-venn-diagram.png"><img src="/assets/gcp-tcp-global-lb/gcp-lb-venn-diagram.png"></a>
-    <figcaption>You can have all 3 of these things, but you must use Proxy Protocol to achieve it.</figcaption>
+    <figcaption>You can meet these 3 requirements simultaneously if you use PROXY protocol.</figcaption>
 </figure>
 
-### Receiving Proxy Protocol using NGINX
-Let's run NGINX on the VM to which our load balancer points. When proxying traffic, NGINX can append an additional header containing the value of the source IP obtained from Proxy Protocol:
+### Setting up our environment in Google
+The script below configures a global TCP proxy network load balancer and associated objects. It is assumed that a VPC network, subnet, and VM instances exist already. 
+
+This script assumes the VM's are F5 BIG-IP devices, although our demo will use Ubuntu VM's with NGINX installed. Either of these are capable of parsing PROXY protocol.
+
+<script src="https://gist.github.com/mikeoleary/5971b3112188d4a4fdbf67dc8c09fc14.js"></script>
+
+### Receiving PROXY protocol using NGINX
+Let's run NGINX on the VM to which our load balancer points. When proxying traffic, NGINX can append an additional header containing the value of the source IP obtained from PROXY protocol:
 
 ```
 server {
-  listen 80 proxy_protocol; # tell NGINX to expect traffic with proxy protocol
+  listen 80 proxy_protocol; # tell NGINX to expect traffic with PROXY protocol
   server_name customer1.my-f5.com;
 
   location / {
     proxy_pass http://localhost:3000;
     proxy_http_version 1.1;
     proxy_set_header x-nginx-ip $server_addr; # append a header to pass the IP address of the NGINX server
-    proxy_set_header x-proxy-protocol-source-ip $proxy_protocol_addr; # append a header to pass the src IP address obtained from Proxy protocol
+    proxy_set_header x-proxy-protocol-source-ip $proxy_protocol_addr; # append a header to pass the src IP address obtained from PROXY protocol
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr; # append a header to pass the src IP of the connection between Google's front end LB and NGINX
     proxy_cache_bypass $http_upgrade;
@@ -66,7 +73,7 @@ server {
 }
 ```
 
-You might notice that NGINX is proxying to <code>http://localhost:3000</code>. I have a simple NodeJS app to display a page with these headers:
+You might notice that NGINX is proxying to `http://localhost:3000`. I have a simple NodeJS app to display a page with HTTP headers:
 
 ```js
 const express = require('express');
@@ -119,15 +126,19 @@ For completeness, NodeJS is using the EJS template engine to build our page. The
 
 ### Cloud Armor
 
-Cloud Armor is an [easy add-on](https://cloud.google.com/blog/products/identity-security/cloud-armor-adds-more-edge-security-policies-proxy-load-balancers) when using Google Load Balancers. Simply create a Cloud Armor security policy, add rules (for example, rate limiting) to this policy, and attach it to your TCP load balancer. In this way "edge protection" is applied to your Google workloads with very little effort.
+Cloud Armor is an [easy add-on](https://cloud.google.com/blog/products/identity-security/cloud-armor-adds-more-edge-security-policies-proxy-load-balancers) when using Google load balancers. If required, an admin can:
+1. Create a Cloud Armor security policy
+2. Add rules (for example, rate limiting) to this policy
+3. Attach the policy to a TCP load balancer
+In this way "edge protection" is applied to your Google workloads with little effort.
 
 ### Our end result
-This small demo app to shows that true source IP can be known to an application running inside Google, even when using the Global TCP Network Load Balancer. We've done this using Proxy protocol and NGINX, and we've used NodeJS simply to display a web page.
+This small demo app shows that true source IP can be known to an application running on Google VM's when using the Global TCP Network Load Balancer. We've achieved this using PROXY protocol and NGINX. We've used NodeJS to display a web page with proxied header values.
 
 <figure>
     <a href="/assets/gcp-tcp-global-lb/demo-app-src-ip-nodejs.png"><img src="/assets/gcp-tcp-global-lb/demo-app-src-ip-nodejs.png"></a>
-    <figcaption>Simple demo app showing src IP from Proxy Protocol</figcaption>
+    <figcaption>Simple demo app showing source IP obtained from parsing PROXY protocol</figcaption>
 </figure>
 
-Thanks for reading, and reach out with any questions!
+Thanks for reading. Please reach out with any questions!
 
