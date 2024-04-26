@@ -21,7 +21,7 @@ Recently a customer asked about their options in Google cloud with global load b
 
 ### Which load balancer type fits best?
 
-[This guide](https://cloud.google.com/load-balancing/docs/choosing-load-balancer) outlines our options for Google LB's. Because our requirements include **global, TCP-only** load balacing, we will choose the highlighted LB type of "Global external proxy Network Load Balancer".
+[This guide](https://cloud.google.com/load-balancing/docs/choosing-load-balancer) outlines our options for Google LB's. Because our requirements include **global, TCP-only** load balancing, we will choose the highlighted LB type of "Global external proxy Network Load Balancer".
 
 <figure>
     <a href="/assets/gcp-tcp-global-lb/lb-product-tree-annotated.png"><img src="/assets/gcp-tcp-global-lb/lb-product-tree-annotated.png"></a>
