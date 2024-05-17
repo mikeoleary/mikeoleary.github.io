@@ -37,13 +37,6 @@ There main problem with the design above is that **cross-AZ traffic is very like
 - Pods in AZ 3 can **only** be reached by generating cross-AZ traffic
 - Since only 1x BIG-IP is active, cross-AZ traffic would occur for about 2 out of every 3 connections!
 
-<figure>
-    <a href="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-default.png" class="image-popup" title="3-AZ deployment with NodePort.">
-        <img src="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-default.png">
-    </a>
-    <figcaption>A typical BIG-IP HA pair with CIS configuring the BIG-IP devices.</figcaption>
-</figure>
-
 #### NodePort vs Cluster mode
 It is worth noting that the diagrams above have assumed your CIS deployment is in ClusterIP mode, and not NodePort mode. If you were sending traffic to K8s nodes and relying on ```kube-proxy``` to distribute traffic evenly across pods, you would almost certainly generate a high amount of cross-AZ traffc between nodes. 
 
