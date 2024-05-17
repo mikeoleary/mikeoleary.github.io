@@ -37,16 +37,6 @@ There main problem with the design above is that **cross-AZ traffic is very like
 - Pods in AZ 3 can **only** be reached by generating cross-AZ traffic
 - Since only 1x BIG-IP is active, cross-AZ traffic would occur for about 2 out of every 3 connections!
 
-#### NodePort vs Cluster mode
-It is worth noting that the diagrams above have assumed your CIS deployment is in ClusterIP mode, and not NodePort mode. If you were sending traffic to K8s nodes and relying on ```kube-proxy``` to distribute traffic evenly across pods, you would almost certainly generate a high amount of cross-AZ traffc between nodes. 
-
-<figure>
-    <a href="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-NodePort.png" class="image-popup" title="3-AZ deployment with NodePort.">
-        <img src="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-NodePort.png">
-    </a>
-    <figcaption>Don't do this with NodePort mode! You'll still generate cross-AZ traffic!</figcaption>
-</figure>
-
 #### Using the node-label-selector argument with CIS
 Today, CIS does not take advantage of native [Topology Aware Routing](https://kubernetes.io/docs/concepts/services-networking/topology-aware-routing/), a K8s feature that is still in beta. However, the ```node-label-selector``` argument achieves a very similar outcome: keeping traffic local to an AZ where possible.
 
@@ -115,7 +105,15 @@ spec:
 
 ```
 
+#### NodePort vs Cluster mode
+It is worth noting that the diagrams above have assumed your CIS deployment is in ClusterIP mode, and not NodePort mode. If you were sending traffic to K8s nodes and relying on ```kube-proxy``` to distribute traffic evenly across pods, you would almost certainly generate a high amount of cross-AZ traffc between nodes. 
 
+<figure>
+    <a href="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-NodePort.png" class="image-popup" title="3-AZ deployment with NodePort.">
+        <img src="/assets/reduce-cross-AZ-traffic-EKS/reduce-cross-AZ-traffic-NodePort.png">
+    </a>
+    <figcaption>Don't do this with NodePort mode! You'll still generate cross-AZ traffic!</figcaption>
+</figure>
 
 #### Further reading about topology and routing in K8s 
 K8s allows for [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to define how you would like your pods deployed across zones. Similar to pod and node affinity and anti-affinity, this allows administrators to consider which nodes their pods will be scheduled to. This article will not dive deep into Kubernetes topology, except to say that it is set up using node labels called `topologyKey` labels.
