@@ -25,10 +25,9 @@ Simple enough, right? But there's some other problems that add an interesting tw
 - **do not use NLB** if possible (NLB throughput cost is significant)
 - while mTLS/other functionality could be performed _inside_ the cluster (eg NGINX Ingress Controller), we want these functions performed external to the cluster (for "business" reasons)[^1]
 
-Let's solve for this!
+Let's solve this!
 
 #### F5 CIS with a typical, default installation
-##### Typical CIS deployment
 Typically, a customer will use F5 CIS to dynamically update the configuration of an HA pair of BIG-IP's, sending traffic directly to pods running inside Kubernetes (K8s).
 
 <figure>
@@ -39,9 +38,9 @@ Typically, a customer will use F5 CIS to dynamically update the configuration of
 </figure>
 
 #####  Cross-AZ traffic with a typical CIS deployment
-The above diagram is shows a valid deployment, but cross-AZ traffic is very likely. The BIG-IP's are unaware of K8s topology, and will load-balance equally across AZ's.
+The above diagram is a valid deployment, but cross-AZ traffic is very likely. The BIG-IP's are unaware of K8s topology, and will load-balance equally across AZ's.
 - Since only 1x BIG-IP is active in the pair, ingressing to pods in 2 out of 3 AZ's requires cross-AZ traffic
-- Ingressing to pods in AZ 3 will _always_ generate cross-AZ traffic, regardless of which BIG-IP is active
+- Ingress to pods in AZ 3 will _always_ generate cross-AZ traffic, regardless of which BIG-IP is active
 
 #### Multiple active BIG-IP's and the node-label-selector argument with CIS
 CIS can use the `node-label-selector` argument to limit load-balancing to select nodes. We will use this to keep ingress traffic local to an AZ.
