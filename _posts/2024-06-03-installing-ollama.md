@@ -38,7 +38,7 @@ Here's my documenting how to set up these 2 things manually on a newly-deployed 
 ###### Open WebUI
 1.  First we need Node.js >= 20.10
   - [Instructions for Node.js](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04): `sudo apt update && sudo apt install nodejs` && `sudo apt install npm`
-  - ` node -v && npm -v`
+  - `node -v && npm -v`
 2. Now we need Python >= 3.11
   - [Instructions for Python](https://phoenixnap.com/kb/how-to-install-python-3-ubuntu): `sudo apt update && sudo apt install python3`
   - But `python3 --version` shows 3.10.12 
