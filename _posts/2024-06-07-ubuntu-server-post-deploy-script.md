@@ -51,6 +51,17 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ## Install Git
 sudo apt install git-all -y
 
+## Install Jekyll so I can work on my blog
+# https://jekyllrb.com/docs/installation/ubuntu/
+sudo apt-get install ruby-full build-essential zlib1g-dev -y
+
+echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
+echo 'export GEM_HOME="$HOME/gems"' >> ~/.bashrc
+echo 'export PATH="$HOME/gems/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+gem install jekyll bundler
+
 ## Optional
 #sudo apt install python3-pip -y
 
