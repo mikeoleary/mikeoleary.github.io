@@ -40,13 +40,23 @@ sudo apt-get update
 sudo apt-get install curl -y
 
 ## Install AZ CLI
-# full instructions from Microsoft:
+# full instructions from Microsoft: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+## Install AWS CLI
+# full instructions from AWS: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
 ## Install kubectl 
 # instructions from k8s docs here: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# create .kube directory in user's home directory and also enable kubectl autocompletion for the user
+mkdir ~/.kube
+echo 'source <(kubectl completion bash)' >>~/.bashrc
 
 ## Install Git
 sudo apt install git-all -y
