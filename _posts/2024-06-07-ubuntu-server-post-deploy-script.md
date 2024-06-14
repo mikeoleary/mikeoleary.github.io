@@ -60,6 +60,8 @@ echo 'source <(kubectl completion bash)' >>~/.bashrc
 
 ## Install Git
 sudo apt install git-all -y
+git config --global user.name "mikeoleary"
+git config --global user.email "michael.w.oleary@gmail.com"
 
 ## Install Jekyll so I can work on my blog
 # https://jekyllrb.com/docs/installation/ubuntu/
