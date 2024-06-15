@@ -50,8 +50,9 @@ A few other tips that I like to follow.
   - I don't use a virtual whiteboard to draw diagrams live in front of customers. I find that distracting.
   - I have a fancy camera and a basic mic, but no fancy software. 
 - I like to offload to hardware to keep things simple.
-  - The ATEM Mini pictured offloads the need to run a driver to connect my camera as a webcam. It can do fancy things. I use it simply to switch cameras, nothing else.
-- My office is pretty clean. You'll never see a Zoom background with loose papers or half-finished projects from me. No conversation starters like Lego models or Star Wars posters. That's just not me, and I'd rather focus my meetings on solving the problems at hand. Not every body needs to hear about my hobbies.
+  - The ATEM Mini pictured offloads the need to run a driver to connect my camera as a webcam. 
+  - It can do fancy things. I use it simply to switch cameras, nothing else.
+- My office is pretty clean. You'll never see a Zoom background with loose papers or half-finished projects from me. No conversation starters like Lego models or Star Wars posters. That's just not me, and I'd rather focus my meetings on solving the problems at hand.
 - Lastly, I'll say that I had Ethernet cable run to my office when I moved into the house.
 
 #### Setting up my new laptop
@@ -61,12 +62,13 @@ Any other software or configuration that was local to my old laptop was so minor
 - Notepad++
 - VS Code
  - remote SSH extension from Microsoft
-- Pagent
+- Pageant
   - shortcut to launch this at startup and load a priv key: https://community.sw.siemens.com/s/article/How-to-setup-Pageant-to-run-at-Startup-and-load-your-private-key-automatically
 - putty
 - puttygen
-  - load this at startup. I seem to use it all the time.
-- Hyper V
+  - load this at startup. I use it all the time.
+- Hyper V.
+ - quick deploy a Ubuntu 22.04 VM and configure it as per previous post.
 - WinSCP
 - Blackmagic ATEM switcher software
 - Elgato keylight software called Control Center
