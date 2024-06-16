@@ -21,10 +21,19 @@ toc: true
 #### Background
 It's funny how unrelated event seem to happen together. Recently I had to rebuild the Ubuntu Linux VM that I use for everyday tasks, so I [documented the setup]({% post_url 2024-06-07-ubuntu-server-post-deploy-script %}) to save time in future. 
 
-A couple days later, my trusty Windows10 Dell laptop has died. The SSD disk is toast, and I certainly don't want to invest time into trying to salvage this desktop hardware. It's probably 3-4 yrs old and out of warranty. Some engineers enjoy tinkering with desktop hardware. These days I just don't have the time.
+A couple days later, my trusty Windows10 Dell laptop failed to boot saying the SSD was toast. It's probably 3-4 yrs old and out of warranty. 
+
+<figure>
+    <a href="/assets/new-laptop/old-laptop1.jpg"><img src="/assets/new-laptop/old-laptop1.jpg"></a>
+    <figcaption>Some engineers enjoy tinkering with desktop hardware and would attempt to fix this. These days I can't prioritize that and had it replaced.</figcaption>
+</figure>
+
+<!-- 
+![Old laptop](/assets/new-laptop/old-laptop1.jpg){:width="400px"}{:style="display:block; margin-left:auto; margin-right:auto"} 
+-->
 
 #### New laptop
-Funny story. My laptop died on a Tue. I called our helpdesk. I figured I had until at least Thur or Fri before F5 could express ship me a replacement (F5 is HQ'd in Seattle and I live in Boston). I planned to get some yardwork done while working from my cell phone where possible. I went outside and pressure-washed my deck, outdoor furniture cushions, and anything else I could find in my back yard.
+Funny story- my laptop died on a Tue. I figured I had until at least Thur or Fri before F5 could express ship me a replacement (F5 is HQ'd in Seattle and I live in Boston). I planned to get some yardwork done while working from my cell phone where possible. I went outside and pressure-washed my deck, outdoor furniture cushions, and anything else I could find in my back yard.
 
 {% include gallery id="gallery" caption="When your laptop dies you have limited time to get other stuff done during daytime hours!"  %}
 
