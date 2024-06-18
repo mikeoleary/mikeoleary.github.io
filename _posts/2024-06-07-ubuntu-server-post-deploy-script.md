@@ -74,6 +74,10 @@ source ~/.bashrc
 
 gem install jekyll bundler
 
+## Install the jq tool
+sudo apt update
+sudo apt install jq -y
+
 ## Optional
 #sudo apt install python3-pip -y
 
