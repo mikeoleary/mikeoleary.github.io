@@ -52,7 +52,7 @@ There's a few things here that sometimes confuse the first-time cloud admin:
 
 #### When and why to use Azure LB's "Floating IP" option.
 
-The [floating IP] checkbox(https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-floating-ip) on your Azure LB rule could be understood as telling Azure LB: "do not perform Destination NAT for this traffic". This is similar to F5's [nPath](https://my.f5.com/manage/s/article/K11116) (aka assymetric, or Direct Server Return) architecture. One difference: in Azure, you don't need to set the default gateway of your VM to point to Azure LB. In fact, Azure LB has no concept of "Self IP".
+The [floating IP checkbox](https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-floating-ip) on your Azure LB rule could be understood as telling Azure LB: "do not perform Destination NAT for this traffic". This is similar to F5's [nPath](https://my.f5.com/manage/s/article/K11116) (aka assymetric, or Direct Server Return) architecture.
 
 <figure style="width: 1200px">
     <a href="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"><img src="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"></a>
@@ -66,30 +66,31 @@ Why would you configure as above?
 
 ##### How to configure BIG-IP when "Floating IP" is used
 
-Here's an alternative approach, but it requires a semi-advanced workaround for Azure health checks. _It's important to understand this workaround and if you don't, just stick with the common approach outlined above._
+The previous option is an alternative approach, but it requires a semi-advanced workaround for Azure health checks. _It's important to understand this workaround and if you don't, just stick with the common approach outlined first in this article._
 
-If you use Floating IP with your Azure LB rule, health probes from Azure LB will target the primary ipconfig on the Azure NIC. In BIG-IP, that's your Self IP. And your Self IP will always respond healthy if it is probed (and if the ports are allowed in Self IP config).
+If you use Floating IP with your Azure LB rule, health probes from Azure LB will target the primary ipconfig on the Azure NIC. In BIG-IP, that's your Self IP. And your Self IP will always respond healthy if it is probed, evn on the Standby device (of course, port lockdown settings on Self IP's must allow health checks).
 
-Put another way: your Standby BIG-IP will respond as healthy to Azure LB, and Azure LB will send some data plane traffic to it. This will cause problems so we must find a way to make our Standby BIG-IP "unhealthy" in Azure LB.
+Put another way: your Standby BIG-IP will respond as healthy to Azure LB, and Azure LB will send data plane traffic to it. This will cause problems, so we must make our Standby BIG-IP "unhealthy" in Azure LB.
 
 Enter VIP targeting and iRules. Do this:
 
 1. Create LB rule on Azure LB sending traffic to the primary ipconfig on the dataplane NIC on the BIG-IP devices.
-2. Create an Azure LB health check for this rule. A HTTP health check with default settings is fine.
-3. Create an iRule. Call it anything you like. Here is the iRule:
+2. Configure a health probe for this rule. A HTTP health check with default settings is fine.
+3. Create an iRule on BIG-IP:
 ```bash
 when HTTP_REQUEST {
 HTTP::respond 200 content "device is active"
 }
 ```
-4. Create a VIP called ```/Common/unroutable_vip``` and give it an IP address of ```255.255.255.254``` and attach the iRule from the previous step.
-5. Create another iRule. Call it whatever you like. Here is the iRule: 
+4. Create a VIP called ```/Common/unroutable_vip``` and give it an IP address of ```255.255.255.254``` and attach the iRule from the previous step. This VIP will only be reachable on the Active device, and is not routable from outside of BIG-IP.
+5. Create another iRule:
 ```bash
 when HTTP_REQUEST {
 virtual /Common/unroutable_vip
 }
 ```
-6. Create 2x VIPs with the same IP addresses as the Self IP's. Do this separately on both devices. Don't worry, the VIP will not get sync'd between devices because it's on a local Self IP. Listen on port 80 and attach the above iRule.
+6. On BIG-IP Device 1, create a VIP with the same IP addresses as the Self IP. [This is allowed](https://my.f5.com/manage/s/article/K13896). Listen on port 80, add HTTP profile, and attach the above iRule.
+7. On BIG-IP Device 2, notice that the VIP created in the above step is not sync'd to Device 2. Repeat the above step with a VIP created on the same IP address as the Self IP. 
 
 Now, your Azure LB will health check both devices, sending HTTP health checks to both devices and hitting the VIP's you created on the Self IP's. However, only the active device will successfully forward traffic to this VIP called "unroutable" and the Standby device will fail to do this. This means that Azure LB will believe that the Active is health and the Standby is down.
 
