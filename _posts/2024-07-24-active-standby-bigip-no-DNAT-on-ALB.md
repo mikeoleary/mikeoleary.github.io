@@ -6,6 +6,8 @@ tags: [azure]
 excerpt: "Here's the details for a specific BIG-IP set up behind Azure LB. " #this is a custom variable meant for a short description to be displayed on home page
 ---
 
+This article was prompted by a [previous article](https://community.f5.com/kb/technicalarticles/transparent-load-balancing-in-azure/281678), where I had read about this solution but was looking for more detailed instructions.
+
 This article covers an advanced scenario for running an Active/Standby BIG-IP pair behind Azure LB. Read and follow these instructions **all** of the following conditions are met:
 1. You want to run 2x BIG-IP devices in Active/Standby configuration
 2. You want to provide High Availability between BIG-IP devices using Azure LB
