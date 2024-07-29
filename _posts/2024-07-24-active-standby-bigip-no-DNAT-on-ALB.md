@@ -52,7 +52,7 @@ There's a few things here that sometimes confuse the first-time cloud admin:
 
 #### When and why to use Azure LB's "Floating IP" option.
 
-The [floating IP checkbox](https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-floating-ip) on your Azure LB rule could be understood as telling Azure LB: "do not perform Destination NAT for this traffic". This is similar to F5's [nPath](https://my.f5.com/manage/s/article/K11116) (aka assymetric, or Direct Server Return) architecture.
+The [floating IP checkbox](https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-floating-ip) on your Azure LB rule could be understood as telling Azure LB: "do not perform Destination NAT for this traffic". This is similar to F5's [nPath](https://my.f5.com/manage/s/article/K11116) (aka asymmetric, or Direct Server Return) architecture.
 
 <figure style="width: 1200px">
     <a href="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"><img src="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"></a>
