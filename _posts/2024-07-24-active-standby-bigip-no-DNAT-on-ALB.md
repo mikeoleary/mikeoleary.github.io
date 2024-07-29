@@ -1,21 +1,21 @@
 ---
 layout: single
-title:  "Active/Standby BIG-IP's behind Azure LB with Floating IP (no DNAT) on Azure LB"
+title:  "Transparent load balancing in Azure, Part 2"
 categories: [azure]
 tags: [azure]
 excerpt: "Here's the details for a specific BIG-IP set up behind Azure LB. " #this is a custom variable meant for a short description to be displayed on home page
 ---
 
-This article was prompted by a [previous article](https://community.f5.com/kb/technicalarticles/transparent-load-balancing-in-azure/281678), where I had read about this solution but was looking for more detailed instructions.
+This article is intended to be a sequel to a previous article I read, but did not author, titled  [Transparent Load Balancing in Azure](https://community.f5.com/kb/technicalarticles/transparent-load-balancing-in-azure/281678). If you read this article, you may see I've left a [comment](https://community.f5.com/kb/technicalarticles/transparent-load-balancing-in-azure/281678/comments/281681) that briefly describes some necessary details left out of the original article. 
 
 This article covers an advanced scenario for running an Active/Standby BIG-IP pair behind Azure LB. Read and follow these instructions **all** of the following conditions are met:
 1. You want to run 2x BIG-IP devices in Active/Standby configuration
-2. You want to provide High Availability between BIG-IP devices using Azure LB
+2. You plan to use Azure LB to provide High Availability (HA), as opposed to other methods like DNS or the Cloud Failover Extension
 3. Your intention is to have your BIG-IP's Virtual Server ip address (VIP) be the same as the frontend ipconfig on the Azure LB.
 4. You have checked the "Floating IP" checkbox on your Azure LB rule that forwards traffic to BIG-IP
 
 #### Options for High Availability (HA) of Network Virtual Appliances (NVA's) in Azure
-This article does not cover the advantages and disadvantages of different methods to achieve HA in Azure. Broadly speaking, there are multiple approaches:
+This article does not cover the advantages and disadvantages of different methods to achieve HA in Azure. There are multiple approaches:
 - **Azure Load Balancer**. This approach uses a simple, L4 load balancer in Azure to disaggregate traffic across multiple devices.
   - Active/Standby, Active/Active, or multiple standalone devices are options here. 
   - _This article focuses on a scenario using Active/Standby BIG-IP devices behind Azure LB, when the "Floating IP" checkbox is checked on the Azure LB rule._
@@ -24,17 +24,15 @@ This article does not cover the advantages and disadvantages of different method
   - It can update a route table to ensure the default route (0.0.0.0/0) for a subnet sends response traffic to remote clients back via the active BIG-IP.
   - It can update a route table to point an entire CIDR block dedicated for VIPs at the active device. This is also referred to as an "alien range" approach. 
 - **DNS Load Balancing**. A simple method for High Availability between devices is using DNS and multiple standalone appliances. However DNS load balancing within a local site is not common (although GSLB is a common practice across geographic regions)
-- **Other approaches**. Azure have a Gateway Load Balancer that can be used but requires advanced knowledge, and you might even consider BGP in some cloud scenarios. These are out of scope for this article.
+- **Other approaches**. Azure offers a Gateway Load Balancer that F5 [supports](https://community.f5.com/kb/technicalarticles/big-ip-integration-with-azure-gateway-load-balancer/291102) but this requires advanced knowledge, and you might even consider BGP in [some cloud scenarios](https://community.f5.com/kb/technicalarticles/aws-transit-gateway-connect-gre--bgp--/281647). These are out of scope for this article.
 
 #### Common Architecture of Azure LB with BIG-IP pair
 
-The common/easiest architecture of running Active/Standby BIG-IP devices behind Azure LB looks like the following diagram.
-
-Note that the BIG-IP devices are in Active/Standby mode, and Azure LB is simply a "dumb" Layer-4 traffic disaggregator. 
+The most common way to run Active/Standby BIG-IP devices behind Azure LB looks like the following diagram.
 
 <figure>
     <a href="/assets/azure-lb-active-standby-floating/default-lb-config.png"><img src="/assets/azure-lb-active-standby-floating/default-lb-config.png"></a>
-    <figcaption>Default LB architecture</figcaption>
+    <figcaption>Notice that the BIG-IP devices are in Active/Standby mode, and Azure LB is simply a Layer-4 traffic disaggregator. </figcaption>
 </figure>
 
 #### Taking a closer look at IP addressing with this common architecture
@@ -43,7 +41,7 @@ Let's take a look at where we configure IP addresses based on the most common ap
 
 <figure style="width: 1200px">
     <a href="/assets/azure-lb-active-standby-floating/default-lb-config-with-comments.png"><img src="/assets/azure-lb-active-standby-floating/default-lb-config-with-comments.png"></a>
-    <figcaption>Default LB architecture with IP addresses and NATing depicted</figcaption>
+    <figcaption>Notice that Destination NAT occurs by default at Azure LB, and at BIG-IP.</figcaption>
 </figure>
 
 There's a few things here that sometimes confuse the first-time cloud admin:
@@ -58,7 +56,7 @@ The [floating IP checkbox](https://learn.microsoft.com/en-us/azure/load-balancer
 
 <figure style="width: 1200px">
     <a href="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"><img src="/assets/azure-lb-active-standby-floating/lb-config-floating-ip.png"></a>
-    <figcaption>LB config with floating ip</figcaption>
+    <figcaption>Notice that you can disable DNAT at Azure LB (and at F5 BIG-IP if desired).</figcaption>
 </figure>
 
 Why would you configure as above?
