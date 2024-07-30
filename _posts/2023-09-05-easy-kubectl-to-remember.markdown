@@ -9,7 +9,7 @@ tags: kubernetes
 This is a short list of kubectl commands that I use frequently. The idea of this blog post is to save me from searching my Notepad++ tabs looking for random notes I've taken in the last few weeks/months.
 
 #### Quickly launch a troubleshooting pod 
-```kubectl run -i --tty curl --image=curlimages/curl --restart=Never -- sh```
+```kubectl run -i --tty curl --image=curlimages/curl --restart=Never --rm -- sh```
 
 #### Quickly enable autocompletion
 {% highlight bash %}
