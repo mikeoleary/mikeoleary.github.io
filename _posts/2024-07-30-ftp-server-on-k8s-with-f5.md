@@ -10,8 +10,8 @@ toc: true
 ### Background
 After 5 years honing Kubernetes expertise, I was happy to undertake a challenge: expose an FTP server from within Kubernetes, using Azure Red Hat OpenShift (ARO), and protecting with F5 BIG-IP. Here's how I did this.
 
-### Isn't FTP a legacy technology?
-Yes, FTP has been around since the early 70's. It was designed for efficient tranfer of files, and although it's insecure by default, it's still commonly seen today.
+**Isn't FTP a legacy technology?** Yes, FTP has been around since the early 70's. It was designed for efficient tranfer of files, and although it's insecure by default, it's still commonly seen today
+{: .notice--info}
 
 #### Advantages of FTP
 As opposed to other file transfer methods, FTP does offer a few advantages:
@@ -72,10 +72,18 @@ Now, deploy a pair of F5 BIG-IP devices into the VNET, where the network interfa
 <hr style="border-color: gray">
 Now, configure CIS in the cluster so that applications can be exposed from Kubernetes via BIG-IP.[^2]
 
+I'm going to use NodePort mode (not cluster mode) in this example, but either will work.[^3]
+
+At this point, you'll have an environment that looks like this:
+<figure>
+    <a href="/assets/ftp-on-k8s/ftp-in-k8s-1.png"><img src="/assets/ftp-on-k8s/ftp-in-k8s-1.png"></a>
+    <figcaption>Typical BIG-IP integration with K8s using CIS</figcaption>
+</figure>
+
 <hr style="border-color: gray">
 Now, deploy your FTP server like this:
 
-1. First, a namespace and service account to use
+1. First, a namespace and service account to use, like this.
 2. Second, a PersistentVolumeClaim like this.
 3. Then, a Deployment like this to run a FTP server.
   a. Reference the container image of docker.io/fauria/vsftpd
@@ -131,4 +139,7 @@ Most of this requires a skillset that covers legacy and modern technologies. If 
 * 
 [^1]: For this step, I typically deploy an ARM template from F5, like this one: https://github.com/F5Networks/f5-azure-arm-templates-v2/tree/main/examples/failover
 [^2]: This is more complex than just installing an operator, and requires BIG-IP credentials. I won't go into the details here.
+[^3]: NodePort is easiest in this case, because the BIG-IP can route to each of the nodes. If your K8s cluster has routable pods, like many AKS/EKS/GKE deployments, then cluster mode is relatively easy also. If you must integrate with the CNI, routing to pods directly is more complex. With ARO it is possible, but requires you to set up UDR's in Azure so that routes to pods point to hosts. This is outside the scope of this article, but I'd be happy to walk you through it if you reach out.
+
+
 
