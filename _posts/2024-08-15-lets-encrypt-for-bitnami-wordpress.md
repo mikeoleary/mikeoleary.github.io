@@ -29,6 +29,11 @@ I am no Wordpress expert. I have found a Bitnami Wordpress image, running via AW
 
 You can also manually use the cert tool to generate SSL certs and then put them in the correct directory.
 
+<figure>
+    <a href="/assets/wordpress-letsencrypt/cli-screen-capture.png"><img src="/assets/wordpress-letsencrypt/cli-screen-capture.png"></a>
+    <figcaption>Logging in via SSH to public IP of my EC2 instance</figcaption>
+</figure>
+
 ### Wordpress Admin
 This is something I have left up to the website owner, but for my own reference:
 - URL: https://the-domain-of-the-pain-clinic/wp-admin
