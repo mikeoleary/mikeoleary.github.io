@@ -1,0 +1,67 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster: ocpcluster-xxxxx # (this is my cluster ID)
+  name: ocpcluster-xxxxx-worker-us-east-1c # (this is my cluster ID + role + AWS AZ)
+  namespace: openshift-machine-api
+spec:
+  replicas: 0  # leave this at 0 when you apply machineset and then scale machineset to 1 when ready.
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: ocpcluster-xxxxx
+      machine.openshift.io/cluster-api-machineset: ocpcluster-xxxxx-worker-us-east-1c
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: ocpcluster-xxxxx
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: ocpcluster-xxxxx-worker-us-east-1c
+    spec:
+      lifecycleHooks: {}
+      metadata:
+        labels:
+          node-role.kubernetes.io/worker: ""
+      providerSpec:
+        value:
+          ami:
+            id: ami-075cc98266f9df501
+          apiVersion: machine.openshift.io/v1beta1
+          blockDevices:
+          - ebs:
+              encrypted: true
+              iops: 0
+              kmsKey:
+                arn: ""
+              volumeSize: 120
+              volumeType: gp3
+          credentialsSecret:
+            name: aws-cloud-credentials
+          deviceIndex: 0
+          iamInstanceProfile:
+            id: ocpcluster-xxxxx-worker-profile
+          instanceType: m5.metal #this will make sure the additional VM is metal
+          kind: AWSMachineProviderConfig
+          metadata:
+            creationTimestamp: null
+          metadataServiceOptions: {}
+          placement:
+            availabilityZone: us-east-1c
+            region: us-east-1
+          securityGroups:
+          - filters:
+            - name: tag:Name
+              values:
+              - ocpcluster-xxxxx-node
+          - filters:
+            - name: tag:Name
+              values:
+              - ocpcluster-xxxxx-lb
+          subnet:
+            id: subnet-xxxxxxxxxxxxxxxxx # this is the subnet ID that is in us-east-1c (it has a route out to internet)
+          tags:
+          - name: kubernetes.io/cluster/ocpcluster-xxxxx
+            value: owned
+          userDataSecret:
+            name: worker-user-data
