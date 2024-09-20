@@ -111,6 +111,10 @@ You should now have a VM running in OpenShift.
 
 You will notice that accessing the VM is possible using [virtctl](https://kubevirt.io/user-guide/user_workloads/virtctl_client_tool/), which is a tool you will need to download.
 
+Documentation links:
+* [Connecting to virtual machine consoles](https://docs.openshift.com/container-platform/4.16/virt/virtual_machines/virt-accessing-vm-consoles.html)
+* [Configuring SSH access to virtual machines](https://docs.openshift.com/container-platform/4.16/virt/virtual_machines/virt-accessing-vm-ssh.html)
+
 You could also create a Service (ClusterIP, NodePort, or LB) but since I haven't done this yet, I'll leave it for another blog post.
 
 Thanks for reading!
