@@ -10,7 +10,7 @@ toc: true
 ### Background
 After 5 years honing Kubernetes expertise, I was happy to undertake a challenge: expose an FTP server from within Kubernetes, and protecting with F5 BIG-IP. I'll do this using Azure Kubernetes Service (AKS) as an example environment.
 
-**Isn't FTP a legacy technology?** Yes, FTP has been around since the early 70's. It was designed for efficient tranfer of files, and although it's insecure by default, it's still commonly seen today
+**Isn't FTP a legacy technology?** Yes, FTP has been around since the early 70's. It was designed for efficient tranfer of files. Although it's insecure by default, it's still commonly seen today for some file transfer types.
 {: .notice--info}
 
 #### Advantages of FTP
@@ -36,16 +36,20 @@ FTP is considered legacy because of a few limitations. There's workaround and en
 
 There are many more complex advantages and disadvantages, but to summarize: running and securing FTP servers requires knowledge of the protocols, not just general network and security knowledge.
 
-#### Enhancements and common FTP servers
-FTP is common, but it's also common to see enterprises also offer FTPS and SFTP. While they sound similar, these are different protocols. FTPS allows for encryption of the control channel and (optionally) the data channel. SFTP adds file transfers upon the SSH protocol, meaning all transfers can happen over a single TCP connection on port 22. However, SFTP is difficult to proxy, and FTPS requires additional knowledge on top of FTP.
+#### FTPS and SFTP
+FTP is common, but it's also common to see enterprises also offer FTPS and SFTP. While they sound similar, these two are different protocols. FTPS allows for encryption of the control channel and (optionally) the data channel of FTP. SFTP adds file transfers upon the SSH protocol, meaning all transfers can happen over a single TCP connection on port 22. 
 
-For this reason, enterprise-level FTP servers are usually well built out with a customer support team, static IP addresses, commercial software, and support. Changes are usually slow and upgrades infrequent. File transfers are usually frequent, large, and core to a business process. For example, large financial customers may have longstanding practices built around FTP, and so require very high confidence in the redundancy, security, and support of their FTP systems.
+There is some difficulty with all of these technologies. SFTP is difficult to proxy. FTPS requires additional knowledge on top of FTP, which itself is a learning curve for most folks.
 
-In my most recent case, my customer was running IBM Sterling B2B Integrator installed on Azure Red Hat OpenShift (ARO). This is an enterprise-level, commercial application running an enterprise K8s distribution. In my demonstration, I'm going to use a free FTP server, vsftp, but I will run this on ARO also, to be as close to an enterprise use case as possible.
+#### Common FTP servers
+
+For this reason, enterprise-level FTP servers are usually well built out with a customer support team, static IP addresses, commercial software, and support. Changes are usually slow and upgrades infrequent. File transfers themselves are usually frequent, large, and core to a business process. For example, large financial customers may have longstanding practices built around FTP with partners, and so require very high confidence in the redundancy, security, and support of their FTP systems.
+
+In my most recent case, my customer was running [IBM Sterling B2B Integrator installed Red Hat OpenShift](https://community.ibm.com/community/user/dataexchange/blogs/nikesh-midha1/2020/02/19/ibm-sterling-b2b-integrator-on-red-hat-openshift-c). OpenShift was running on Azure ([ARO](https://learn.microsoft.com/en-us/azure/openshift/intro-openshift)). This menas we had a commercial application running on an enterprise K8s distribution, which itself ws running as a managed service in Azure. In my demonstration, I'm going to use a free FTP server, vsftp, and I will start by running on Azure Kubernetes Service (AKS). 
 
 ### Why run FTP on Kubernetes?
 
-Kubernetes offers the same advantages for FTP applications as it does to others: scale, platform-agnostic, heavily automated deployment and operations, etc. But Kubernetes networking is a challenge for the average network engineer, and FTP applications are an *additional* challenge for the average person. FTP and K8s are not a likely combinatino, but it can be done!
+Kubernetes offers the same advantages for FTP applications as it does to others: scale, platform-agnostic, heavily automated deployment and operations, etc. But Kubernetes networking is a challenge for the average network engineer, and FTP applications are an *additional* challenge for the average engineer. FTP and K8s are not a likely combination, but it can be done!
 
 ### How to run your FTP server on Kubernetes and still get enterprise-level protection
 
@@ -59,22 +63,55 @@ Broadly speaking, there's three major types of services in Kubernetes[^1]: Clust
 </figure>
 
 ##### ClusterIP
-Cluster IP is possible if your pods are reachable by your external load balancer. This is becoming more common. With my AKS deployments, my pods are routable from the VNet without additional work from me. This is true for many cloud-based deployments. If you're using a CNI with an overlay network (which typically use tunnels like VXLAN or GENEVE or routing like BGP), then you'll need to get your external loadbalancer integrated with the CNI, or use another method. I won't go into the details of CNI integration here.
+[Cluster IP](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) is possible if your pods are directly routable by your external load balancer. With my AKS deployments, my pods are routable from the VNet without additional work.
+
+If you're using a CNI with an overlay network (which typically use tunnels like VXLAN or GENEVE or routing like BGP), then you'll need to get your external loadbalancer integrated with the CNI, or use another method. I won't go into the details of CNI integration here.
 
 ##### NodePort
-NodePort builds on top of ClusterIP. In the case of FTP, a NodePort service will *require* you to have an external loadbalancer in place. This is because your clients will be using TCP ports that are chosen by the FTP server and communicated over the control channel.
+[NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) builds on top of ClusterIP, and maps a high port from the NodePort range (30000-32767) to port exposed on the pod. 
+
+However, with FTP, we _**cannot**_ have random port translation. Since the data channel port is assigned by the server, it will tell the client to connect on an expected port. That port must be available to the client, and correctly mapped back to the server.
+
+The way to do this is to [manually define](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport-custom-port) our NodePort values in our service, and match them with the PASV ports from your FTP server. Ie., 
+
+````yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-ftp-service
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:    
+    - port: 21
+      targetPort: 21
+      # no need for a pre-determined port for the control channel
+    - port: 30100
+      targetPort: 30100
+      nodePort: 30100 # notice here, we have our PASV port range within the NodePort default range, and we match them manually.
+    - port: 30101
+      targetPort: 30101
+      nodePort: 30101
+    # etc...
+````
+
+In reality, a NodePort service is a confusing option for exposing FTP services!
 
 ##### LoadBalancer
-Creation of a load balancer object happens automatically if your cluster is running in public cloud. In this case, I'm running in Azure but I *do not* want to use an Azure Load Balancer. So I'll create a service of type LoadBalancer but also define `loadBalancerClass` so that Azure ignores this object and BIG-IP will act as the load balancer instead. (This feature was [released](https://clouddocs.f5.com/containers/latest/reference/release-notes.html#release-notes-2-18-0) in CIS 2.18)
+Creation of a [LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) service builds upon NodePort. A [controller](https://kubernetes.io/docs/concepts/architecture/controller/) will automatically configure a corresponding load balancer in the cloud. 
+
+In this case, I'm running in Azure but I *do not* want to use an Azure Load Balancer, so I'll create a service of type LoadBalancer but also define [`loadBalancerClass`](https://clouddocs.f5.com/containers/latest/reference/release-notes.html#release-notes-2-18-0) so the Azure controller ignores this object. CIS will configure BIG-IP as the load balancer instead. 
 
 <figure>
     <a href="/assets/ftp-on-k8s/services.png"><img src="/assets/ftp-on-k8s/services.png"></a>
-    <figcaption>NodePort is a superset of ClusterIP. LoadBalancer is a superset of NodePort.</figcaption>
+    <figcaption>LoadBalancer is a superset of NodePort, which is itself a superset of ClusterIP.</figcaption>
 </figure>
 
-In this demo, I'll use a LoadBalancer service.
-
 #### Let's deploy our cloud environment
+
+In this demo, I'll use a LoadBalancer service and deploy my CIS instance in cluster mode.
+
 Build an Azure VNet with a few subnets. 
 
 ````bash
@@ -107,7 +144,7 @@ az aks get-credentials -n $CLUSTER -g $RESOURCEGROUP -f ~/.kube/config
 
 Now, configure CIS in the cluster so that applications can be exposed from Kubernetes via BIG-IP.[^3]
 
-I'm going to use NodePort mode (not cluster mode) in this example, but either will work.[^4]
+I'm going to use Cluster mode (not NodePort mode) in this example, but either will work.[^4]
 
 <hr style="border-color: gray">
 
@@ -122,11 +159,10 @@ Now, deploy your FTP server like this:
 
 1. First, a namespace like this.
 2. Second, a PersistentVolumeClaim like this.
-3. Then, a Deployment like this to run a FTP server.
-4. Now, create a service of type NodePort like this.
-5. Finally, in order to have CIS create a VirtualServer on BIG-IP, a Transport Server, like this.
-
-Now, you have an architecture that looks like this:
+3. Then, a Deployment like this to run a FTP server. Notice that our deployment defines several environment variables within our pods, which are used to set the PASV FTP ports and the FTP server address.
+4. On the BIG-IP, create an iRule called `/Common/ftp_ports` that looks like this: `when SERVER_CONNECTED { FTP::port 10000 10002 }`
+5. Now, create a policy object like this.
+6. Finally, in order to have CIS create a VirtualServer on BIG-IP, a service of type LoadBalancer like this.
 
 ### Testing our FTP application
 
@@ -159,9 +195,7 @@ Here's a very short clip using a graphical tool, WinSCP, to demonstrate the same
 
 ### OpenShift vs other Kubernetes distributions
 
-You may notice in my example above that I have used `fauria/vsftp` as the container image for my FTP server. This will work in a regular K8s distro (I've used AKS in my PoC) but in OpenShift you will have to do some extra things to make this work.
-
-
+You may notice in my example above that I have used `fauria/vsftp` as the container image for my FTP server. This will work in a regular K8s distro (I've used AKS in my PoC). OpenShift will require additional resources, such as a Security Context Constraint (SCC), so I have not documented this here. Perhaps in a future article.
 
 ### Conclusion
 
@@ -178,8 +212,8 @@ Most of this requires a skillset that covers legacy and modern technologies. If 
 * 
 [^1]: There are more than 3 types of services in K8s, but understanding these 3 major types is key.
 [^2]: For this step, I typically deploy an ARM template from F5, like this one: https://github.com/F5Networks/f5-azure-arm-templates-v2/tree/main/examples/failover
-[^3]: This is more complex than just installing an operator, and requires BIG-IP credentials. I won't go into the details here except to say that I deployed in NodePort mode.
-[^4]: NodePort is easiest in this case, because the BIG-IP can route to each of the nodes. If your K8s cluster has routable pods, like many AKS/EKS/GKE deployments, then cluster mode is relatively easy also. If you must integrate with the CNI, routing to pods directly is more complex. With ARO it is possible, but requires you to set up UDR's in Azure so that routes to pods point to hosts. This is outside the scope of this article, but I'd be happy to walk you through it if you reach out.
+[^3]: I won't detail installing CIS here, except to say that I defined `pool-member-type` as `cluster` and `load-balancer-class` as `f5cis`, to match the spec in my service.
+[^4]: I find cluster mode easiest. If using a service of type NodePort, there are several differences. The PASV ports must be between 30000-32767, must manually match each NodePort they are assigned, and the FTP server must send the IP address of the K8s Node (not Pod) in the PASV response. CIS must have `pool-member-type` as `nodeport`
 
 
 
