@@ -8,7 +8,7 @@ toc: true
 ---
 Ugh. I thought I was done, but I have a Part 3 to write.
 
-[Part 1]({% post_url 2024-10-12-migrate-bitnami-wordpress-between-servers %})
+[Part 1]({% post_url 2024-10-12-migrate-bitnami-wordpress-between-servers %})<br>
 [Part 2]({% post_url 2024-10-13-migrate-bitnami-wordpress-between-servers-part-2 %})
 
 ### AWS Lightsail Bitnami Wordpress and sending mail
@@ -24,14 +24,17 @@ After verifying the email address I want to send my mail to, and the domain, my 
 
 After doing all of this, I see that Amazon has [instructions](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-enabling-email-on-wordpress.html) specifically for Lightsail Wordpress instances. These are the best instructions that I've seen regarding this procedure.
 
-### One more thing
+### A couple more things
 
-Oh yeah, I changed my wp-config.php file one last time:
+- I changed my wp-config.php file one last time:
 
-`define( 'DOMAIN_CURRENT_SITE', 'lowellpaincenter.com' );`
-was changed to
+`define( 'DOMAIN_CURRENT_SITE', 'lowellpaincenter.com' );`<br>
+was changed to<br>
 `define( 'DOMAIN_CURRENT_SITE', $_SERVER['HTTP_HOST'] );`
 
 I think this allows me to login to either site and get to the Network Admin Dashboard. Before, I could only do this if logged into lowellpaincenter
+
+- I removed SSH (TCP/22) from allowed FW rules in Lightsail. Now, for admin access to CLI, myself or someone else will need to log into the AWS Lightsail console and re-enable. Even after that, SSH will require authenticating with my private key.
+
 
 
