@@ -22,6 +22,8 @@ I would take screenshots, but those in the linked document above were exactly wh
 
 After verifying the email address I want to send my mail to, and the domain, my contact forms now work.
 
+After doing all of this, I see that Amazon has [instructions](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-enabling-email-on-wordpress.html) specifically for Lightsail Wordpress instances. These are the best instructions that I've seen regarding this procedure.
+
 ### One more thing
 
 Oh yeah, I changed my wp-config.php file one last time:
