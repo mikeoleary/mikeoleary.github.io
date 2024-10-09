@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Migrate Bitnami Wordpress beteween servers"
+title:  "Migrate Bitnami Wordpress between servers"
 categories: [blogging]
 tags: [blogging]
 excerpt: "I hate Wordpress, so I'm creating a post to remember how I migrated this site." #this is a custom variable meant for a short description to be displayed on home page
@@ -19,7 +19,7 @@ Time to migrate!
 
 Simple plan first: migrate like-for-like. Bitnami Wordpress on Amazon Lightsail, from 1 AWS account to another.
 
-Long-term ideal plan: migrate this website away from Lighsail, on some fancy Wordpress deployment that is container-based and can run anywhere in a serverless, almost cost-free manner. I'm yet to find this ideal solution for next-to-free with almost-zero effort for migration.
+Long-term ideal plan: migrate this website away from Lightsail, on some fancy Wordpress deployment that is container-based and can run anywhere in a serverless, almost cost-free manner. I'm yet to find this ideal solution for next-to-free with almost-zero effort for migration.
 
 #### Setting up for migration
 1. I had my friend create a personal account on aws.amazon.com. He then gave me username and password.
