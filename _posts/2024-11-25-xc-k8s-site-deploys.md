@@ -4,6 +4,7 @@ title:  "XC K8s sites deployed quickly"
 categories: [kubernetes]
 tags: [gke, xc]
 excerpt: "These are shortcut commands for when I want to deploy a XC site in K8s quickly." #this is a custom variable meant for a short description to be displayed on home page
+toc: true
 ---
 This post exists solely to allow me to copy/paste some quick commands to deploy a K8s cluster and K8s site in F5 Distributed Cloud (XC).
 
@@ -32,6 +33,49 @@ gcloud container clusters create oleary-cluster \
 
 {% endhighlight %}
 
+### AKS
+
+#### GKE cluster deployment
+I like to create a VNET when creating a cluster:
+
+{% highlight bash %}
+#SET VARIABLES
+REGION=eastus2
+CLUSTER_NAME=oleary-cluster
+VNET_NAME=oleary-vnet
+VNET_CIDR='10.0.0.0/16'
+RG_NAME=oleary-rg2
+SUBNET_NAME=subnet1
+SUBNET_CIDR='10.0.0.0/24'
+
+#CREATE VNET
+az group create --location $REGION -n $RG_NAME
+
+az network vnet create \
+    --name $VNET_NAME \
+    --resource-group $RG_NAME \
+    --address-prefix $VNET_CIDR \
+    --subnet-name $SUBNET_NAME \
+    --subnet-prefixes $SUBNET_CIDR \
+    --location $REGION
+
+az aks create \
+    --resource-group $RG_NAME \
+    --name $CLUSTER_NAME \
+    --node-count 1 \
+    --node-vm-size="Standard_D4s_v3"
+    --vnet-subnet-id "/subscriptions/aacd7ba7-e47c-4cb7-a8b7-90f81fdd3865/resourceGroups/$RG_NAME/providers/Microsoft.Network/virtualNetworks/$VNET_NAME/subnets/$SUBNET_NAME" \
+    --service-cidr "172.16.0.0/16" \
+    --dns-service-ip "172.16.0.10" \
+    --network-plugin azure 
+
+#Note: cluster must have nodes with at least 4vCPU for XC site to deploy.
+
+az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME
+
+{% endhighlight %}
+
+
 #### XC site deployment
 
 {% highlight bash %}
@@ -40,7 +84,7 @@ curl --output ce-k8s.yml "https://gitlab.com/volterra.io/volterra-ce/-/blob/mast
 
 #edit the manifest and change 3 things: Lat/Long, name of XC site, and site token.
 
-kubectl apply -f ce-k8s.yml
+kubectl apply -f ce_k8s.yml
 
 {% endhighlight %}
 
