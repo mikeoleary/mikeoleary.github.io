@@ -35,7 +35,7 @@ gcloud container clusters create oleary-cluster \
 
 ### AKS
 
-#### GKE cluster deployment
+#### AKS cluster deployment
 I like to create a VNET when creating a cluster:
 
 {% highlight bash %}
