@@ -12,9 +12,9 @@ Once in a while I need to download or generate a kubeconfig file for a cluster, 
 ### Azure Kubernetes Service (AKS)
 {% highlight powershell %}
 ## output to a file with the --file argument, otherwise it merges with the default kubeconfig
-$ResourceGroup = 'my-resource-group-name'
-$ClusterName = 'my-cluster-name'
-$FileName = 'aks-kubeconfig'
+ResourceGroup='my-resource-group-name'
+ClusterName='my-cluster-name'
+FileName='aks-kubeconfig'
 az aks get-credentials --resource-group $ResourceGroup --name $ClusterName --file $FileName
 {% endhighlight %}
 
