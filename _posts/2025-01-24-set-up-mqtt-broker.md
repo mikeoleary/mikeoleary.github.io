@@ -6,6 +6,11 @@ tags: [mqtt]
 excerpt: "Quickly set up a MQTT broker when you need one" #this is a custom variable meant for a short description to be displayed on home page
 toc: true
 ---
+
+<figure>
+    <a href="/assets/mqtt-broker/mosquitto-logo.png"><img src="/assets/mqtt-broker/mosquitto-logo.png"></a>
+</figure>
+
 First post of 2025! I've been working on a few things but nothing that was worthy of a new post. Frustratingly, I've made slow progress with a challenging MQTT use case so I'm going to break this down into a few easy posts that I can refer to in future.
 
 ### How to quickly deploy an MQTT broker
@@ -14,6 +19,7 @@ First post of 2025! I've been working on a few things but nothing that was worth
 An MQTT broker can run on Windows, Linux, and of course can run inside K8s. I will document a quick K8s set up in a future post, but for now we'll start with Ubuntu 22.04 LTS
 
 #### Choose and install MQTT software
+
 I'm going to choose [Mosquitto](https://mosquitto.org/) because it's popular. HiveMQ is also popular and perhaps I'll do that in future too.
 
 Mosquitto is available in the default package repositories, so you could run ```sudo apt install -y mosquitto``` and I will show an example of that below.
