@@ -28,8 +28,14 @@ In my case here, I need:
 #### Client in K8s (left side of diagram)
 Because I am building a quick demo, I just followed my own instructions from [my recent post]({% post_url 2025-01-25-set-up-mqtt-in-k8s %}) and created an installation of Mosquitto inside K8s. Nothing really special here. I don't really need a broker, I really just want the command line tools but this was a quick way of doing this.
 
+Here are the files I used to deploy the client in K8s:
+- [deployment.yaml](/assets/mqtt-broker/yaml-manifests/mosquitto/deployment.yaml){:target="_blank"}
+- [mosquitto-config.yaml](/assets/mqtt-broker/yaml-manifests/mosquitto/mosquitto-config.yaml){:target="_blank"}
+- [ns.yaml](/assets/mqtt-broker/yaml-manifests/mosquitto/ns.yaml){:target="_blank"}
+- [service.yaml](/assets/mqtt-broker/yaml-manifests/mosquitto/service.yaml){:target="_blank"}
+
 #### Server outside of K8s (right side of diagram)
-Again I followed my own instructions from a [different previous post]{% post_url 2025-01-24-set-up-mqtt-broker %}. I built an Ubuntu VM and installed Mosquitto. But unlike last time, I configured a few more settings:
+Again I followed my own instructions from a [different previous post]({% post_url 2025-01-24-set-up-mqtt-broker %}). I built an Ubuntu VM and installed Mosquitto. But unlike last time, I configured a few more settings:
 - I **only** allowed port 8883 from Internet to my VM (note: port 1883 denied)
 - This installation listens on 8883 and uses TLS for secure transport
 - This installation requires a client certificate from MQTT clients (ie, mTLS)
