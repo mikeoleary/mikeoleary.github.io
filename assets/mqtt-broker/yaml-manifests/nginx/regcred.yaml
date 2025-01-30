@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: regcred
+  namespace: nginx
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: You would run this command in order to create this file: kubectl create secret docker-registry regcred --docker-server=private-registry.nginx.com --docker-username=<JWT Token> --docker-password=none [-n namespace]. See this link for instructions on creating this file: https://docs.nginx.com/nginx-ingress-controller/installation/nic-images/get-image-using-jwt/

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        image: private-registry.nginx.com/nginx-plus/base:r33 #this is a private repo that requires authentication. The regcred secret contains a JWT that customers can download from myF5.
+        imagePullPolicy: IfNotPresent
+        name: nginx-plus
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 1883
+          name: mqtt-port
+          protocol: TCP
+        - containerPort: 8081
+          name: readiness-port
+          protocol: TCP
+        - containerPort: 9113
+          name: prometheus
+          protocol: TCP
+        - containerPort: 9114
+          name: service-insight
+          protocol: TCP
+
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: "/etc/nginx/license.jwt"
+          subPath: license.jwt
+          name: license-token
+        - mountPath: "/etc/nginx/nginx.conf"
+          subPath: nginx.conf
+          name: nginx-config-file
+        - mountPath: "/etc/nginx/tls.crt"
+          subPath: tls.crt
+          name: mqtt-cert
+        - mountPath: "/etc/nginx/tls.key"
+          subPath: tls.key
+          name: mqtt-key
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regcred #The regcred secret contains a JWT that customers can download from myF5.
+      restartPolicy: Always
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccount: nginx
+      serviceAccountName: nginx
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: license-token
+        secret:
+          secretName: license-token
+      - name: nginx-config-file
+        configMap:
+          name: nginx-config-file
+      - name: mqtt-cert
+        secret:
+          secretName: mqtt-cert-key-secret
+      - name: mqtt-key
+        secret:
+          secretName: mqtt-cert-key-secret
+    
