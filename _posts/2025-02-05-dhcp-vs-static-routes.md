@@ -11,6 +11,9 @@ toc: true
     <a href="/assets/dhcp-static-routes/conflicting-routes.webp"><img src="/assets/dhcp-static-routes/conflicting-routes.webp"></a>
 </figure>
 
+**Exciting update!** I shared this post with folks at F5 and they created an official KB article: [K000149690](https://my.f5.com/manage/s/article/K000149690). This is the first time I've had an official KB article written based on something I've helped find and define, so it's satisfying to see this documented by F5.
+{: .notice}
+
 ### Summary
 I recently learned that the Azure DHCP server defines routes for DHCP clients, and that if you have a statically configured route that overlaps a DHCP-configured route, plus upgrade your BIG-IP, you may hit a problem.
 
