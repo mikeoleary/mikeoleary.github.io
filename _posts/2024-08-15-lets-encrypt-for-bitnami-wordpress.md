@@ -27,7 +27,7 @@ I am no Wordpress expert. I have found a Bitnami Wordpress image, running via AW
 5. I had to then fill out the prompts with the URL's that I wanted, comma-separated.
 6. That should be it. After this, there should be a cron job that updates the certs every 90 days or so.
 
-You can also manually use the cert tool to generate SSL certs and then put them in the correct directory.
+You can also [manually use the cert tool to generate SSL certs](https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/#alternative-approach) and then put them in the correct directory.
 
 <figure>
     <a href="/assets/wordpress-letsencrypt/cli-screen-capture.png"><img src="/assets/wordpress-letsencrypt/cli-screen-capture.png"></a>
