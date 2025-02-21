@@ -54,7 +54,7 @@ First off, using SOPS as a sidecar container isn't perfect. Some obvious issues 
 It might be more feasible to install the SOPS utility in the container image of the application container itself. Then have the application container decrypt and use the secret itself, no sidecar required. But in my case, we did not have the option to edit the application container at all, so the sidecar approach at least lets us 
 
 #### How to set up SOPS as a sidecar container
-Let's take a look at this Docker Compose file. I have a local directory called `secrets` with 2 files: `private.rsa` and `secret.enc.txt` which is an encrypted file that I have created before this demo.
+Let's take a look at this Docker Compose file. I have a local directory called `secrets` with 3 files: `private.rsa`, `secret.enc.txt` and a generic `.sops.yaml` file. I had prepared these files earlier. Familiarize yourself with the SOPS documentation to learn how to create these.
 
 ```bash
 version: '3'
