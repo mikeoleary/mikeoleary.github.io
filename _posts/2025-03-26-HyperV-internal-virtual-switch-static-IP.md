@@ -35,12 +35,15 @@ The default virtual switch in my Hyper-V installation is an Internal virtual swi
 ### Details
 For 3 years I've had this pet peeve. 
 
-I run a Windows 11 laptop, but every day I use an Ubuntu VM running locally on my laptop with Hyper-V. I'm sure there's other ways, but I like this setup: it's cheap (no cloud compute costs), my VM is persistent, and I can [rebuild it with my favorite tools]({% post_url 2024-06-07-ubuntu-server-post-deploy-script %}) very easily.
+I run a Windows 11 laptop, but every day I use an Ubuntu VM running locally on my laptop with Hyper-V. I'm sure there's other ways, but I like this setup: 
+- it's cheap (no cloud compute costs)
+- my VM is persistent
+- I can [rebuild it with my favorite tools]({% post_url 2024-06-07-ubuntu-server-post-deploy-script %}) very easily.
 
 #### Annoying problem
-I use Ubuntu 22.04 because it's a quick deployment via my local Hyper-V installation. I attach the default virtual switch because it's fast and easy. The VM would get an IP address via DHCP, I'd connect to it via SSH from my local laptop, and I'd go to work.
+I use Ubuntu 22.04 because it's a quick to deploy. I attach the default virtual switch because it's easy. The VM would get an IP address via DHCP from this Internal switch, I'd connect to it via SSH from Windows, and I'd go to work.
 
-However, the IP address of my VM would change with every reboot of the Hyper-V host. That's my laptop, so it gets rebooted often. Of course we expect this with DHCP, but the real annoying part: *the DHCP range of the default virtual switch was changing with every laptop reboot*.
+However, the IP address of my VM would change with every reboot of the Hyper-V host. The Hyper-V host is my laptop, so it gets rebooted often. Of course we expect IP changes with DHCP, but the real annoying part: *the DHCP range of the default virtual switch was changing with every laptop reboot*.
 
 This meant that after every laptop reboot, I had to open Hyper-V to see what the IP address of the guest VM was, and then connect to it. Given that I like to connect to it using tools like WinSCP, and sometimes VSCode, and sometimes Putty, I would update my saved connection in each of these tools if/when needed. This took a couple seconds, but it was annoying to do after every laptop reboot.
 
@@ -48,6 +51,8 @@ This meant that after every laptop reboot, I had to open Hyper-V to see what the
     <a href="/assets/hyper-v-switches/changing-ip-address-in-hyper-v.png"><img src="/assets/hyper-v-switches/changing-ip-address-in-hyper-v.png"></a>
     <figcaption>See that when the host reboots, the VM gets a new IP address from a new IP range.</figcaption>
 </figure>
+
+[All](https://www.reddit.com/r/HyperV/comments/iy38ig/fixed_hyperv_virtual_switch_network/) [of](https://learn.microsoft.com/en-us/answers/questions/48268/change-hyper-v-(default-switch)-ip-address-range) [these](https://stackoverflow.com/questions/63449007/how-to-prevent-the-ip-address-of-hyper-v-virtual-switch-from-being-changed) cases seem to review the same annoying problem. 
 
 ##### Why not configure a static IP on my guest VM when using the default virtual switch? 
 I could do this, but the default virtual switch's IP address range would change with every laptop reboot. So, after the next reboot, my guest's static IP address would fall outside of the range of the switch to which it was connected, making it unreachable. It wasn't just the changing IP address that was annoying, it was the changing IP range of the default virtual switch.
@@ -76,17 +81,20 @@ By now we know that Hyper-V has external, internal, and private virtual switches
 
 Because a private virtual switch does not offer connection to the host network at all, this didn't suit me. I want to connect to my VM via SSH. I also want my guest VM to have outbound Internet access, but I don't need it to be directly accessed from the outside network.
 
-##### Why not create a new internal virtual switch?
+##### Why not create a new Internal virtual switch?
 That's what I did in the end! I didn't realize a few things until I took the time to read, which is why it took me so long to get around to it, and also why I'm creating this post:
-- an internal virtual switch does not allow outbound host network access by default
-  - the default virtual switch is internal, but does allow access to the host network via NAT.
-  - to achieve the same outbound access to the Internet with an internal virtual switch you deploy, you can create a NAT network in Windows that matches the IP range of your internal virtual switch's range
-  - DHCP is provided by the default virtual switch, but if you create your own internal virtual switch, it won't serve DHCP requests. Use your own DHCP server or use static IP's for guest VMs.
+- an Internal virtual switch does not allow outbound host network access by default
+  - the default virtual switch is Internal, but does allow access to the host network via NAT.
+  - to achieve the same outbound access to the Internet with an Internal virtual switch you deploy, you can create a NAT network in Windows that matches the IP range of your Internal virtual switch's range
+  - DHCP is provided by the default virtual switch, but if you create your own Internal virtual switch, it won't serve DHCP requests. Use your own DHCP server or use static IP's for guest VMs.
+
+##### What else could you do? 
+Instead of creating a new Internal virtual switch with a static IP address, I could write a script to re-IP the default virtual switch after every reboot, like [this guy](https://urbanek.io/post/fix-hyperv-network/) did. It achieves the same thing (a persistent known IP address range for the virtual switch) but requires a PowerShell script run after *every* reboot and that *also* requires admin privileges. I like my way better, but this is still a nice illustration of our problem.
 
 ### How-to
 
-#### Create a new virtual switch of type internal
-This is very straightforward because there's very few options. Once you've created a virtual switch, you'll see a new virtual network adapter (vEthernet adapter) assigned to the host server (my laptop), allowing the host to communicate with VMs on the internal switch. 
+#### Create a new virtual switch of type Internal
+This is very straightforward because there's very few options. Once you've created a virtual switch, you'll see a new virtual network adapter (vEthernet adapter) assigned to the host server (my laptop), allowing the host to communicate with VMs on the Internal switch. 
 
 <figure>
     <a href="/assets/hyper-v-switches/new-hyper-v-virtual-switch.png"><img src="/assets/hyper-v-switches/new-hyper-v-virtual-switch.png"></a>
