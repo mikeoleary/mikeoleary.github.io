@@ -17,7 +17,7 @@ My hardware is a Dell laptop running Windows 10. I have Hyper-V running, and my 
 This was my starting point:
 - Ubuntu 20.04 VM on Hyper-V
 - Docker CE version 20.10.21 was already installed
-- kubectl was alreaady installed
+- kubectl was already installed
 
 Here's how to install Minikube on a Ubuntu VM when Docker is already installed:
 
@@ -78,7 +78,7 @@ sudo iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
 
 Now, if I go to another host (like my Windows machine) and set a route for 192.168.49.0/24 where the next hop is my (directly connected) Linux VM, that should allow me to use a broswer and hit http://192.168.49.2:31193, right?
 
-The answer is no. [By design](https://minikube.sigs.k8s.io/docs/faq/#how-can-i-access-a-minikube-cluster-from-a-remote-network), minikube is meant to only listen on the local network. If we want to hit this application from a machine other than our Ubuntu VM, we're gonig to need a solution to proxy traffic. 
+The answer is no. [By design](https://minikube.sigs.k8s.io/docs/faq/#how-can-i-access-a-minikube-cluster-from-a-remote-network), minikube is meant to only listen on the local network. If we want to hit this application from a machine other than our Ubuntu VM, we're going to need a solution to proxy traffic. 
 
 ### How you can expose the app to a remote network
 I found three solutions, but more probably exist: kubectl port forwarding, a tool called socat, or NGINX (a web proxy).

@@ -2,7 +2,7 @@
 layout: single
 title:  "Persistent IP address for my Hyper-V guest on Windows 11"
 categories: [Hyper-V]
-tags: [kubernetHyper-Ves]
+tags: [Hyper-V]
 excerpt: "After a few years of this annoying problem, I've finally fixed it." #this is a custom variable meant for a short description to be displayed on home page
 gallery:
   - image_path: assets/hyper-v-switches/Hyper-V-Network-Switches-01.png
