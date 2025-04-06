@@ -6,6 +6,11 @@ tags: [mqtt, nginx]
 excerpt: "This post ties together a few previous posts and shows how to use NGINX to secure MQTT connections" #this is a custom variable meant for a short description to be displayed on home page
 toc: true
 ---
+<figure>
+    <a href="/assets/mqtt-broker/IoT.png"><img src="/assets/mqtt-broker/IoT.png"></a>
+</figure>
+
+
 If you search for guides and documentation on using NGINX to secure MQTT messages, you will most likely find guides where:
 - NGINX is running on a standalone instance (not in K8s)
   - if you are using K8s, you'll find guides to deploy NGINX Ingress Controller (not NGINX Plus running as a typical dataplane proxy)
