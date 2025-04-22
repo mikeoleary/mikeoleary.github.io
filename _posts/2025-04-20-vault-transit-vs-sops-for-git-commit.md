@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Vault Transit vs SOPS if committing ciphertext to git"
+title:  "Vault Transit Engine vs SOPS if committing ciphertext to git"
 categories: [docker]
 tags: [docker, vault]
 excerpt: "Want to commit (encrypted) secrets? It's really only safe one way." #this is a custom variable meant for a short description to be displayed on home page
