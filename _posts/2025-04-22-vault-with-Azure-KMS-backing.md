@@ -134,6 +134,15 @@ vault write auth/approle/role/f5ast-role \
   policies="default"
 ````
 
+Vault doesn’t come with any secrets engines enabled by default (except in dev mode), so you’ll need to manually enable the KV engine before you can store anything:
+````bash
+vault secrets enable -path=secret -version=2 kv
+````
+Explanation:
+* `-path=secret`: mounts the secrets engine at secret/
+* `-version=2`: uses KV v2 (versioned secrets)
+* `kv`: enables the Key/Value secrets engine
+
 #### Notes on HTTPS, UI, and preferences
 - Notice I have the Vault server listening on HTTPS, with HTTP commented out. Because I'm using the default self-signed certs, I have also used `-tls-skip-verify` in my vault cli command, and/or I could set an environment variable with `export VAULT_SKIP_VERIFY=1`.
 - Note, there is also a UI available at `https://[vault-server-ip]:8200`
