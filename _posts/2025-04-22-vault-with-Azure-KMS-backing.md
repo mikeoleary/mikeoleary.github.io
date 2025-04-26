@@ -51,6 +51,13 @@ I'll use Azure Key Vault as my KMS only because I have some other very cheap, lo
 - Install Vault
 - Create the following file at `/etc/vault.d/vault.hcl`
 {% highlight hcl %}
+
+user_lockout "approle" {
+ lockout_threshold = "25"
+ lockout_duration = "1m"
+ #disable_lockout = "true"
+}
+
 storage "file" {
   path = "/opt/vault/data"
 }
@@ -126,12 +133,26 @@ vault login <root token>
 ````
 I also want to enable the AppRole auth method, and I have created an AppRole called **f5ast-role** so that I can access Vault from my AST container:
 ````bash
+#enable the AppRole auth method
 vault auth enable approle
+
+#create a policy that allows reading of secrets
+vault policy write secret_read_policy - <<EOF
+path "secret/data/*" {
+       capabilities = ["read"]
+     }
+EOF
+
+#create an AppRole that includes this policy
 vault write auth/approle/role/f5ast-role \
   token_ttl=60m \
   token_max_ttl=120m \
   secret_id_ttl=60m \
-  policies="default"
+  policies="secret_read_policy"
+
+#Let's get the role id and a secret id for this role, which will be used in our sidecar agent.
+vault read -field=role_id auth/approle/role/f5ast-role > ./role_id
+vault write -f -field=secret_id auth/approle/role/f5ast-role/secret-id > ./secret_id
 ````
 
 Vault doesn’t come with any secrets engines enabled by default (except in dev mode), so you’ll need to manually enable the KV engine before you can store anything:
@@ -145,9 +166,13 @@ Explanation:
 
 #### Notes on HTTPS, UI, and preferences
 - Notice I have the Vault server listening on HTTPS, with HTTP commented out. Because I'm using the default self-signed certs, I have also used `-tls-skip-verify` in my vault cli command, and/or I could set an environment variable with `export VAULT_SKIP_VERIFY=1`.
+- Another env var to run local vault cli commands: `export VAULT_ADDR="https://127.0.0.1:8200"`
 - Note, there is also a UI available at `https://[vault-server-ip]:8200`
 - I can run `vault status` to verify that Vault is running.
 - `vault -autocomplete-install` and reloading the bash shell allows CLI autocomplete.
+- By default, Vault will lock out users who fail authentication several times in quick succession[^1]. This can make troubleshooting difficult, so I've set a lockout time of only 1 min after 25 failed auth attempts for authentications via the approle auth method. This is generous to allow troubleshooting, but still enforces some kind of user lockout.
 
 ### Conclusion
 We now have Vault set up on Ubuntu, and on start up it will automatically unseal using the key from Azure Key Vault. We have initialized Vault, saved our root token, logged into Vault from the local CLI, enabled AppRole auth method and created an AppRole.
+
+[^1]: https://developer.hashicorp.com/vault/docs/configuration/user-lockout
