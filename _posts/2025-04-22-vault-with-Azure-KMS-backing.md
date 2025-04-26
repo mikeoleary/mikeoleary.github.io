@@ -167,6 +167,8 @@ Explanation:
 #### Notes on HTTPS, UI, and preferences
 - Notice I have the Vault server listening on HTTPS, with HTTP commented out. Because I'm using the default self-signed certs, I have also used `-tls-skip-verify` in my vault cli command, and/or I could set an environment variable with `export VAULT_SKIP_VERIFY=1`.
 - Another env var to run local vault cli commands: `export VAULT_ADDR="https://127.0.0.1:8200"`
+- An env var you may consider setting **while testing only**: `VAULT_SKIP_VERIFY=true`
+  - this is a setting used by the vault cli or client, not the server
 - Note, there is also a UI available at `https://[vault-server-ip]:8200`
 - I can run `vault status` to verify that Vault is running.
 - `vault -autocomplete-install` and reloading the bash shell allows CLI autocomplete.
