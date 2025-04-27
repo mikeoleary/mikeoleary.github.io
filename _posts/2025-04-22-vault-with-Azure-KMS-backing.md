@@ -43,7 +43,7 @@ I'll use Azure Key Vault as my KMS only because I have some other very cheap, lo
   - In Azure Key Vault, give this app registration the role of "Key Vault Crypto User"
 
 <figure>
-    <a href="/assets/vault-setup-kms/key-vault-iam.png"><img src="/assets/vault-setup-kms/key-vault-iam.png"></a><caption>Screenshot of IAM permissions on Key Vault. Don't forget to also create the key.</caption>
+    <a href="/assets/vault-setup-kms/key-vault-iam.png"><img src="/assets/vault-setup-kms/key-vault-iam.png"></a><figcaption>Screenshot of IAM permissions on Key Vault. Don't forget to also create the key.</figcaption>
 </figure>
 
 #### Vault set up
@@ -147,7 +147,6 @@ EOF
 vault write auth/approle/role/f5ast-role \
   token_ttl=60m \
   token_max_ttl=120m \
-  secret_id_ttl=60m \
   policies="secret_read_policy"
 
 #Let's get the role id and a secret id for this role, which will be used in our sidecar agent.
