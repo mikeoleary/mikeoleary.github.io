@@ -122,7 +122,7 @@ Let's add a sidecar container who's only job is simple: pull a secret from Vault
 
 ##### Update docker-compose.yaml 
 
-Add the following lines within the **volumes** and **services** section of your docker-compose.yaml file:
+Add the following lines within the **volumes** and **services** section of your docker-compose.yaml file. Notice the $VAULT_ADDR env var and edit to point to your Vault server.
 
 {% highlight yaml %}
 volumes:      #this line is already present
