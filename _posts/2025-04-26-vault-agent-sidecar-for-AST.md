@@ -16,6 +16,11 @@ Hashicorp Vault is a popular approach for secret management. A sidecar container
 ### Overview of architecture
 In this example, we'll follow the official documentation to run F5's Application Study Tool. Then we will modify our configuration by removing the `.env.device-secrets` file that contains the passwords for BIG-IP devices. In place of this file, we will pull a secret using a sidecar container running Vault Agent and provide this secret to our application container.
 
+<figure>
+    <a href="/assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png"><img src="/assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png"></a>
+    <figcaption>Sidecar container pulls secret from Vault and provides it to application container.</figcaption>
+</figure>
+
 ### Deploy AST with defaults
 
 #### Prerequisties
