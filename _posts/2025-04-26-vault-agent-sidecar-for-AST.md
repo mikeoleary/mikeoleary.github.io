@@ -11,7 +11,15 @@ toc: true
 </figure>
 
 ### Summary
-Hashicorp Vault is a popular approach for secret management. A sidecar container running Vault Agent can retrieve secrets and provide them to other containers. We can use these tools for dynamically pulling secrets, such as device passwords, when running the F5 Application Study Tool (AST).
+Hashicorp Vault is a popular approach for secret management. We will cover an example using Vault to store BIG-IP passwords and use them with the F5 Application Study Tool (AST). 
+
+This part 2 of 2 articles:
+
+1. [Vault Agent for F5 AST]({% post_url 2025-04-25-vault-agent-AST %})
+2. [Vault Agent as a sidecar for F5 AST]({% post_url 2025-04-26-vault-agent-sidecar-for-AST %})
+
+#### What is a sidecar container?
+A sidecar container running Vault Agent can retrieve secrets and provide them to other containers. This removes the requirement to run Vault on the Docker Host, allowing the container(s) to run on other servers.
 
 ### Overview of architecture
 In this example, we'll follow the official documentation to run F5's Application Study Tool. Then we will modify our configuration by removing the `.env.device-secrets` file that contains the passwords for BIG-IP devices. In place of this file, we will pull a secret using a sidecar container running Vault Agent and provide this secret to our application container.
@@ -115,10 +123,46 @@ Let's add a sidecar container who's only job is simple: pull a secret from Vault
 - add a file `vault-agent/secret_id` and populate with your Vault's approle secret_id
 - add a file `vault-agent/vault-agent-config.hcl` with the following content:
 
-<figure>
-    <a href="/assets/vault-agent-sidecar/vault-agent-config.png"><img src="/assets/vault-agent-sidecar/vault-agent-config.png"></a>
-    <figcaption>This is an image because the characters from this script cause my blogging platform to improperly display the text.</figcaption>
-</figure>
+{%highlight hcl%}
+{% raw %}
+exit_after_auth = false
+pid_file = "/tmp/vault-agent.pid"
+
+vault {
+  tls_skip_verify = true
+  retry {
+    num_retries = 5
+  }
+}
+
+auto_auth {
+  method "approle" {
+    mount_path = "auth/approle"
+    config = {
+      role_id_file_path = "/etc/vault/role_id"
+      secret_id_file_path = "/etc/vault/secret_id"
+    }
+  }
+
+  sink "file" {
+    config = {
+      path = "/tmp/token"
+    }
+  }
+}
+
+env_template "BIGIP_PASSWORD_1" {
+   contents             = "{{ with secret \"secret/bigip_password_1/config\" }}{{ .Data.data.password }}{{ end }}"
+   error_on_missing_key = true
+}
+
+exec {
+  command                   = ["apk add yq && yq eval '.bigip/1.password = $BIGIP_PASSWORD_1' /otel-config/receivers_template.yaml > /otel-config/receivers.yaml && sleep 300"]
+  restart_on_secret_changes = "always"
+  restart_stop_signal       = "SIGTERM"
+}
+{% endraw %}
+{%endhighlight%}
 
 ##### Update docker-compose.yaml 
 
