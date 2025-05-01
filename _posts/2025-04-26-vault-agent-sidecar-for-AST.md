@@ -109,10 +109,21 @@ networks:
 ### Use a sidecar container for secret injection
 Now let's move away from using `.env.device-secrets` and use a sidecar container to inject these secrets. We will add, remove, or edit the following files:
 
-<figure>
-    <a href="/assets/vault-agent-sidecar/files-to-edit.png"><img src="/assets/vault-agent-sidecar/files-to-edit.png"></a>
-    <figcaption>Files to add, remove, or edit in order to use sidecar container for secret injection</figcaption>
-</figure>
+{% highlight bash %}
+{% raw %}
+application-study-tool/
+├── docker-compose.yml                      #edit
+├── .env.device-secrets                     #remove
+└── vault-agent/                            #add
+    ├── vault-agent-config.hcl              #add
+    ├── role_id                             #add
+    └── secret_id                           #add
+└── services/  
+    └── otel-collector/
+        └── defaults/
+            └── bigip-scraper-config.yaml   #edit
+{% endraw %}
+{% endhighlight %}
 
 #### Add Vault Agent container
 Let's add a sidecar container who's only job is simple: pull a secret from Vault and update the original `receivers.yaml` file with a password.
