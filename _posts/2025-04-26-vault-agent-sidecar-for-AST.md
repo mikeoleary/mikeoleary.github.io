@@ -5,6 +5,16 @@ categories: [docker]
 tags: [docker, vault]
 excerpt: "Draft for F5 DevCentral Article" #this is a custom variable meant for a short description to be displayed on home page
 toc: true
+gallery:
+  - image_path: assets/vault-agent-sidecar/docker_bigip.png
+    url: assets/vault-agent-sidecar/docker_bigip.png
+    title: "Docker without Vault Agent"
+  - image_path: assets/vault-agent-sidecar/docker_vault_agent_bigip.png
+    url: assets/vault-agent-sidecar/docker_vault_agent_bigip.png
+    title: "Vault Agent installed locally"
+  - image_path: assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png
+    url: assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png
+    title: "Vault Agent as Sidecar"
 ---
 <figure>
     <a href="/assets/vault-agent-sidecar/vault-agent-sidecar.png"><img src="/assets/vault-agent-sidecar/vault-agent-sidecar.png"></a>
@@ -17,6 +27,10 @@ This part 2 of 2 articles:
 
 1. [Vault Agent for F5 AST]({% post_url 2025-04-25-vault-agent-AST %})
 2. [Vault Agent as a sidecar for F5 AST]({% post_url 2025-04-26-vault-agent-sidecar-for-AST %})
+
+<hr>
+{% include gallery caption="Examples of secret management with Docker"  %}
+<hr>
 
 #### What is a sidecar container?
 A sidecar container running Vault Agent can retrieve secrets and provide them to other containers. This removes the requirement to run Vault on the Docker Host, allowing the container(s) to run on other servers.

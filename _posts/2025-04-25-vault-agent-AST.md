@@ -5,6 +5,16 @@ categories: [docker]
 tags: [docker, vault]
 excerpt: "Draft for F5 DevCentral Article" #this is a custom variable meant for a short description to be displayed on home page
 toc: true
+gallery:
+  - image_path: assets/vault-agent-sidecar/docker_bigip.png
+    url: assets/vault-agent-sidecar/docker_bigip.png
+    title: "Docker without Vault Agent"
+  - image_path: assets/vault-agent-sidecar/docker_vault_agent_bigip.png
+    url: assets/vault-agent-sidecar/docker_vault_agent_bigip.png
+    title: "Vault Agent installed locally"
+  - image_path: assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png
+    url: assets/vault-agent-sidecar/docker_vault_sidecar_bigip.png
+    title: "Vault Agent as Sidecar"
 ---
 <figure>
     <a href="/assets/vault-agent-sidecar/vault-agent-sidecar.png"><img src="/assets/vault-agent-sidecar/vault-agent-sidecar.png"></a>
@@ -17,6 +27,10 @@ This part 1 of 2 articles:
 
 1. [Vault Agent for F5 AST]({% post_url 2025-04-25-vault-agent-AST %})
 2. [Vault Agent as a sidecar for F5 AST]({% post_url 2025-04-26-vault-agent-sidecar-for-AST %})
+
+<hr>
+{% include gallery caption="Examples of secret management with Docker"  %}
+<hr>
 
 ### Overview of architecture
 In this example, we'll follow the official documentation to run F5's Application Study Tool. Then we will modify our configuration by removing the `.env.device-secrets` file that contains the passwords for BIG-IP devices, and provide the value with an environment variable from the Docker Host.
