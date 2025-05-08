@@ -163,6 +163,13 @@ Explanation:
 * `-version=2`: uses KV v2 (versioned secrets)
 * `kv`: enables the Key/Value secrets engine
 
+Don't forget to actually create a secret: 
+````bash
+vault kv put /secret/bigip_password_1/config username=admin password='Sup3rS3cr3tPassw0rd'
+````
+
+
+
 #### Notes on HTTPS, UI, and preferences
 - Notice I have the Vault server listening on HTTPS, with HTTP commented out. Because I'm using the default self-signed certs, I have also used `-tls-skip-verify` in my vault cli command, and/or I could set an environment variable with `export VAULT_SKIP_VERIFY=1`.
 - Another env var to run local vault cli commands: `export VAULT_ADDR="https://127.0.0.1:8200"`
@@ -172,6 +179,15 @@ Explanation:
 - I can run `vault status` to verify that Vault is running.
 - `vault -autocomplete-install` and reloading the bash shell allows CLI autocomplete.
 - By default, Vault will lock out users who fail authentication several times in quick succession[^1]. This can make troubleshooting difficult, so I've set a lockout time of only 1 min after 25 failed auth attempts for authentications via the approle auth method. This is generous to allow troubleshooting, but still enforces some kind of user lockout.
+
+### Testing and validating the secret and AppRole
+Log in with the Vault CLI using the new AppRole, and retrieve the secret value:
+````bash
+#Log into Vault CLI with AppRole
+vault write auth/approle/login role_id=xxx secret_id=xxx
+#Read secret
+vault kv get /secret/bigip_password_1/config
+````
 
 ### Conclusion
 We now have Vault set up on Ubuntu, and on start up it will automatically unseal using the key from Azure Key Vault. We have initialized Vault, saved our root token, logged into Vault from the local CLI, enabled AppRole auth method and created an AppRole.
