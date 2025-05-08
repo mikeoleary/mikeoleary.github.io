@@ -150,7 +150,7 @@ vault write auth/approle/role/f5ast-role \
   policies="secret_read_policy"
 
 #Let's get the role id and a secret id for this role, which will be used in our sidecar agent.
-vault read -field=role_id auth/approle/role/f5ast-role > ./role_id
+vault read -field=role_id auth/approle/role/f5ast-role/role-id > ./role_id
 vault write -f -field=secret_id auth/approle/role/f5ast-role/secret-id > ./secret_id
 ````
 
