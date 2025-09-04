@@ -85,7 +85,9 @@ Now let's check out our VM and it's disk again:
 
 You can see that if we click on the same VM and look at it's disk, the object is now a 'first-class citizen' in Azure. It has properties, tags, and settings that apply to the disk. The disk is not simply a .vhd file that resides in a storage account.
 
-That original vhd file does exist though, so don't forget to clean it up.
+I can access the VM again with my chosen username and password. I know this is my original VM disk (and not a generalized OS image that's just been deployed.)
+
+That original vhd file - the unmanaged disk - does exist in the storage account though, so don't forget to clean it up.
 
 ### Conclusion
 
