@@ -40,9 +40,10 @@ Perhaps you're thinking, can I just create an Azure VM with the .vhd file I down
 So, we need to start with a .vhd file of a BIG-IP that has actually been created for deployment of VM's, which you can do by using the (now deprecated) F5 image bakery tool, or by stopping a running VM and downloading the disk as a VHD file.
 
 Here's what I did to get a BIG-IP with an unmanaged disk:
-- stop an existing BIG-IP and then download the raw VHD
-- upload it to a blob container within a storage account
-- create a VM with an attached disk (example below)
+- deployed an Azure VM with a managed disk (using GUI, ARM template, whatever method you like)
+- stopped that running BIG-IP and then download the raw VHD from the managed disk
+- uploaded that VHD to a blob container within a storage account
+- created a VM with an attached disk (example below)
 
 ```bash
 az vm create \
