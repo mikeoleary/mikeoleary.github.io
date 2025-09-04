@@ -1,0 +1,123 @@
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient backgrounds -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0078d4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#106ebe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005a9e;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Disk gradient -->
+    <radialGradient id="diskGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" />
+      <stop offset="70%" style="stop-color:#40e0d0;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#0078d4;stop-opacity:0.8" />
+    </radialGradient>
+    
+    <!-- Cloud gradient -->
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.1" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Abstract geometric background elements -->
+  <polygon points="0,0 300,0 200,400 0,400" fill="#ffffff" opacity="0.05"/>
+  <polygon points="1200,0 1200,400 900,400 1100,0" fill="#ffffff" opacity="0.05"/>
+  
+  <!-- Floating particles/dots -->
+  <circle cx="150" cy="80" r="3" fill="#40e0d0" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.3;0.6" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="280" cy="150" r="2" fill="#ffffff" opacity="0.4">
+    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="950" cy="120" r="4" fill="#40e0d0" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1050" cy="250" r="2" fill="#ffffff" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.3;0.6" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Main disk storage icons -->
+  <!-- Large primary disk -->
+  <g transform="translate(200,150)">
+    <circle cx="0" cy="0" r="60" fill="url(#diskGradient)" stroke="#40e0d0" stroke-width="2" filter="url(#glow)"/>
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+    <circle cx="0" cy="0" r="5" fill="#ffffff" opacity="0.9"/>
+    <!-- Disk lines -->
+    <circle cx="0" cy="0" r="35" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+    <circle cx="0" cy="0" r="45" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+  </g>
+
+  <!-- Secondary disk -->
+  <g transform="translate(350,200)">
+    <circle cx="0" cy="0" r="45" fill="url(#diskGradient)" stroke="#40e0d0" stroke-width="1.5" opacity="0.8"/>
+    <circle cx="0" cy="0" r="12" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="0" cy="0" r="4" fill="#ffffff" opacity="0.8"/>
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.4"/>
+  </g>
+
+  <!-- Tertiary disk -->
+  <g transform="translate(120,250)">
+    <circle cx="0" cy="0" r="35" fill="url(#diskGradient)" stroke="#40e0d0" stroke-width="1" opacity="0.7"/>
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+    <circle cx="0" cy="0" r="3" fill="#ffffff" opacity="0.7"/>
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+  </g>
+
+  <!-- Cloud elements -->
+  <g transform="translate(800,100)">
+    <path d="M0,40 Q0,20 20,20 Q30,10 50,20 Q70,10 90,20 Q100,20 100,40 Q100,60 90,60 L20,60 Q0,60 0,40 Z" 
+          fill="url(#cloudGradient)" opacity="0.6"/>
+    <!-- Smaller cloud -->
+    <path d="M120,60 Q120,50 130,50 Q135,45 145,50 Q155,45 165,50 Q170,50 170,60 Q170,70 165,70 L130,70 Q120,70 120,60 Z" 
+          fill="url(#cloudGradient)" opacity="0.4"/>
+  </g>
+
+  <!-- Connection lines -->
+  <line x1="260" y1="150" x2="395" y2="200" stroke="#40e0d0" stroke-width="2" opacity="0.3" stroke-dasharray="5,5">
+    <animate attributeName="stroke-dashoffset" values="0;10;0" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <line x1="155" y1="250" x2="245" y2="210" stroke="#40e0d0" stroke-width="2" opacity="0.3" stroke-dasharray="5,5">
+    <animate attributeName="stroke-dashoffset" values="0;10;0" dur="4s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Azure logo-inspired element -->
+  <g transform="translate(1000,180)">
+    <polygon points="0,0 30,0 45,30 15,30" fill="#40e0d0" opacity="0.8"/>
+    <polygon points="15,30 45,30 30,60 0,60" fill="#0078d4" opacity="0.9"/>
+  </g>
+
+  <!-- Title area (transparent for text overlay) -->
+  <rect x="450" y="150" width="400" height="100" fill="rgba(255,255,255,0.1)" rx="10" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  
+  <!-- Decorative data flow elements -->
+  <g transform="translate(600,80)">
+    <rect x="0" y="0" width="8" height="3" fill="#40e0d0" opacity="0.6" rx="1">
+      <animateTransform attributeName="transform" type="translate" values="0,0;100,20;0,0" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="15" y="0" width="6" height="3" fill="#ffffff" opacity="0.4" rx="1">
+      <animateTransform attributeName="transform" type="translate" values="0,0;80,15;0,0" dur="5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="25" y="0" width="10" height="3" fill="#40e0d0" opacity="0.5" rx="1">
+      <animateTransform attributeName="transform" type="translate" values="0,0;120,25;0,0" dur="7s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="390" width="1200" height="10" fill="rgba(64,224,208,0.3)"/>
+</svg>
