@@ -53,7 +53,7 @@ Before you start, ensure you have:
 * A Kubernetes cluster (e.g., a GKE cluster) up and running. If you don't have one, you can create a basic GKE cluster using:
     ```bash
     REGION='us-central1'
-    PROJECTNAME='f5-gcs-4261-sales-ent-sa'
+    PROJECTNAME='your-project-name'
     CLUSTERNAME='openwebui-cluster'
 
     gcloud container clusters create $CLUSTERNAME --region $REGION --project $PROJECTNAME --num-nodes=1
