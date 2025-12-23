@@ -1,5 +1,5 @@
 ---
-title: "Adding inference security to Open Web UI"
+title: "Inference security using Open WebUI"
 date: 2025-12-12
 categories: [ai]
 tags: [f5, ai, guardrails, openwebui, kubernetes]
@@ -7,7 +7,11 @@ excerpt: "A basic intro. How to extend Open Web UI to add a layer of inference s
 toc: true
 ---
 
-This is a direct follow-on from my [previous post]({% post_url 2025-12-6-openwebui-plus-chatgpt %}) about how to use Open WebUI as a "front door" for ChatGPT.
+|AI inference networking |
+|-------|--------|---------|
+| Part 1 | [Open WebUI as front door for ChatGPT]({% post_url 2025-12-6-openwebui-plus-chatgpt %}) |
+| Part 2 | [Inference security using Open WebUI]({% post_url 2025-12-13-inference-security-openwebui %}) |
+
 
 <figure>
     <a href="/assets/openwebui-chatgpt/ai-guardrails.svg"><img src="/assets/openwebui-chatgpt/ai-guardrails.svg"></a>
@@ -32,7 +36,7 @@ Perhaps in future. For now, here's how I added F5 AI Guardrails to my Open WebUI
 - A project API token from CalypsoAI.
 
 #### Instructions
-1. Deploy OpenWeb UI. I use K8s, so follow the previous post.
+1. Deploy Open WebUI. I use K8s, so follow the previous post.
 2. In addition, this time create a secret in K8s to hold our API key for F5 AI Guardrails. Since this was called CalypsoAI before F5 acquired the tech, we'll call the secret calypso-api-key:
 ```bash
 kubectl create secret generic calypso-api-key --from-literal=CALYPSO_API_KEY=your_real_api_key --namespace open-webui

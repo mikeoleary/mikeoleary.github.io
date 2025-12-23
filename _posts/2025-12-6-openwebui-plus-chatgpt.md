@@ -1,11 +1,17 @@
 ---
-title: "Using a local instance of Open Web UI to interface with ChatGPT"
+title: "Open WebUI as front door for ChatGPT"
 date: 2025-12-06
 categories: [ai]
 tags: [ai, openwebui, kubernetes]
 excerpt: "A basic intro: deploy Open WebUI to interface with ChatGPT or other models. Save money, add security and extensibility"
 toc: true
 ---
+
+|AI inference networking |
+|-------|--------|---------|
+| Part 1 | [Open WebUI as front door for ChatGPT]({% post_url 2025-12-6-openwebui-plus-chatgpt %}) |
+| Part 2 | [Inference security using Open WebUI]({% post_url 2025-12-13-inference-security-openwebui %}) |
+
 <figure>
     <a href="/assets/openwebui-chatgpt/openwebui-chatgpt.png"><img src="/assets/openwebui-chatgpt/openwebui-chatgpt.png"></a>
 </figure>
