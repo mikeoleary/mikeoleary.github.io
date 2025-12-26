@@ -11,9 +11,11 @@ toc: true
 |-------|--------|---------|
 | Part 1 | [Open WebUI as front door for ChatGPT]({% post_url 2025-12-6-openwebui-plus-chatgpt %}) |
 | Part 2 | [Inference security using Open WebUI]({% post_url 2025-12-13-inference-security-openwebui %}) |
+| Part 3 | [Layering NGINX for more Inference security]({% post_url 2025-12-23-nginx-openwebui %}) |
 
 <figure>
-    <a href="/assets/openwebui-chatgpt/openwebui-chatgpt.png"><img src="/assets/openwebui-chatgpt/openwebui-chatgpt.png"></a>
+    <a href="/assets/openwebui-chatgpt/ai-inference-demo-header_1.svg"><img src="/assets/openwebui-chatgpt/ai-inference-demo-header_1.svg"></a>
+    <figcaption>A simple front door for your LLM opens up new possibilities.</figcaption>
 </figure>
 
 ## Overview

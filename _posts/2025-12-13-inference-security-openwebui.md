@@ -11,13 +11,15 @@ toc: true
 |-------|--------|---------|
 | Part 1 | [Open WebUI as front door for ChatGPT]({% post_url 2025-12-6-openwebui-plus-chatgpt %}) |
 | Part 2 | [Inference security using Open WebUI]({% post_url 2025-12-13-inference-security-openwebui %}) |
+| Part 3 | [Layering NGINX for more Inference security]({% post_url 2025-12-23-nginx-openwebui %}) |
 
 
 <figure>
-    <a href="/assets/openwebui-chatgpt/ai-guardrails.svg"><img src="/assets/openwebui-chatgpt/ai-guardrails.svg"></a>
+    <a href="/assets/openwebui-chatgpt/ai-inference-demo-header_2.svg"><img src="/assets/openwebui-chatgpt/ai-inference-demo-header_2.svg"></a>
+    <figcaption>Adding inference security using F5 AI Guardrails.</figcaption>
 </figure>
 
-### How to add guardrails to your prompts and responses using Open WebUI
+### How to add guardrails using Open WebUI
 In the previous post we covered 3 easy reasons to use Open WebUI:
 - chat history kept on-prem
 - settings kept on-prem
