@@ -26,9 +26,10 @@ In the previous posts we covered Open WebUI and F5 AI Guardrails. Now we'll add 
 
 ### Instructions to deploy NGINX Ingress Controller
 1. Deploy Open WebUI + CalypsoAI integration on K8s following previous posts.
+  - Instructions now include env var for Open WebUI to define a header for trusted auth: `WEBUI_AUTH_TRUSTED_EMAIL_HEADER`
 2. I've cloned the repo for [NGINX Ingress Controller](https://github.com/nginx/kubernetes-ingress) at version 5.3.1
   - I have added the relevant manifests to the [repo](https://github.com/mikeoleary/my-secure-ai-app/) accompanying this series.
-  - The [instructions to deploy](https://github.com/mikeoleary/my-secure-ai-app/blob/300eeac1af73f10a3b8331070bcd055b8243f503/deploy_notes.md) now include all manifests in the correct order. (The linked instructions are a point-in-time version.)
+  - The [instructions to deploy](https://github.com/mikeoleary/my-secure-ai-app/blob/main/deploy_notes.md) should include all manifests in the correct order.
 3. Now we should have NGINX I.C. running. You should be able to access Open WebUI via public IP address, and your traffic should be traversing NGINX I.C.
   <figure>
     <a href="/assets/openwebui-chatgpt/screenshot-open-webui.png"><img src="/assets/openwebui-chatgpt/screenshot-open-webui.png"></a>
@@ -50,11 +51,12 @@ In the previous posts we covered Open WebUI and F5 AI Guardrails. Now we'll add 
   kubectl get secret open-webui-ca-cert -n open-webui -o json | jq '.type="nginx.org/ca" | .data={"ca.crt": .data."tls.crt"} | .metadata={"name": "open-webui-ca-cert-nginx", "namespace": "open-webui"}' | kubectl apply -f - 
   ```
 6. Create a secret for TLS for NGINX, and multiple mTLS client certs
+  - ensure your mTLS client certs include an email address. The modern way to do this is in the Subject Alternative Name (SAN) field. Cert-manager handles this well.
 
 
 #### Instructions to configure NGINX Ingress Controller
-1. Create a [Policy CR](https://docs.nginx.com/nginx-ingress-controller/configuration/policy-resource/#ingressmtls) that requires mTLS verification. [My example](https://github.com/mikeoleary/my-secure-ai-app/blob/d1740ebee9a6c08c4e31fdbe139356dc36471357/open-webui-nginx-config/policy.yaml).
-2. Create a VirtualServer CR that implements TLS with our server cert and references our Policy impelemting mTLS. [My example](https://github.com/mikeoleary/my-secure-ai-app/blob/d1740ebee9a6c08c4e31fdbe139356dc36471357/open-webui-nginx-config/virtualserver.yaml).
+1. Create a [Policy CR](https://docs.nginx.com/nginx-ingress-controller/configuration/policy-resource/#ingressmtls) that requires mTLS verification. [My example](https://github.com/mikeoleary/my-secure-ai-app/blob/main/open-webui-nginx-config/policy.yaml).
+2. Create a VirtualServer CR that implements TLS with our server cert and references our Policy impelemting mTLS. [My example](https://github.com/mikeoleary/my-secure-ai-app/blob/main/open-webui-nginx-config/virtualserver.yaml).
 
 #### Now, test your access to Open WebUI
 1. Export CA Cert into trusted root store of your VM (unless using public CA)
@@ -63,8 +65,8 @@ In the previous posts we covered Open WebUI and F5 AI Guardrails. Now we'll add 
 
   <figure>
     <a href="/assets/openwebui-chatgpt/open-webui-screenshot5.png"><img src="/assets/openwebui-chatgpt/open-webui-screenshot5.png"></a>
-    <figcaption>If you can load the Open WebUI site only by providing a mTLS client cert, you have correctly configured NGINX to require and verify client certificates.</figcaption>
+    <figcaption>If you can login to Open WebUI by **only** providing a mTLS client cert, you have correctly configured NGINX to require and verify client certificates, to pass the value of the email on to Open WebUI via a HTTP Header, and Open WebUI to accept this header value as an authenticated user.</figcaption>
   </figure>
 
 ### Conclusion
-We've added mTLS authentication to our environment, by using NGINX Ingress Controller. Next we'll use the identity learned via mTLS to make decisions at the time of inference within Open WebUI.
+We've added mTLS authentication to our environment, by using NGINX Ingress Controller and Open WebUI trusted headers.
