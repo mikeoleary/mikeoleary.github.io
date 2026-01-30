@@ -41,7 +41,7 @@ Long story short, they have good [documentation here](https://killercoda.com/cre
 My first scenario:
 <figure>
     <a href="/assets/practice-exams/killer-coda-screenshot.png"><img src="/assets/practice-exams/killer-coda-screenshot.png"></a>
-    <figcaption>Check this out at https://killercoda.com/michael-oleary/scenario/nginx-ingress-controller</figcaption>
+    <figcaption>Check this out at https://killercoda.com/f5-se/scenario/nginx-ingress-controller</figcaption>
 </figure>
 
 ### Other platforms
