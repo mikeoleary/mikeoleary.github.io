@@ -1,6 +1,6 @@
 ---
 title: "More KillerCoda cool fetures"
-date: 2026-01-20
+date: 2026-01-30
 categories: [kubernetes]
 tags: [kubernetes]
 excerpt: "Cool features I've added over the past few days."
