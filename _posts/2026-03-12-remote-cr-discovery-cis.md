@@ -72,4 +72,12 @@ data:
 
 For the sake of full repeatability, I am going to share my manifests [here](https://github.com/mikeoleary/cis-multicluster-remote-cr-discovery).
 
+Also, for the sake of thinking about how this would apply to CIS in HA setup, here's a diagram that depicts our problem with an Active/Standby CIS cluster.
+
+
+<figure>
+    <a href="/assets/cis-multicluster/cis-multicluster-diagram3.png"><img src="/assets/cis-multicluster/cis-multicluster-diagram3.png"></a>
+    <figcaption>With multi-cluster and CIS in HA mode, without remote CR discovery</figcaption>
+</figure>
+
 Thanks for reading!
