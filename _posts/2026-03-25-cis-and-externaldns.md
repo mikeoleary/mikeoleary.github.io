@@ -18,7 +18,7 @@ F5 Container Ingress Services (CIS) is a powerful way to manage BIG-IP configura
 One common question that comes up: **"What if I want DNS records created automatically when a VirtualServer comes up, but I'm not using F5 DNS?"**
  
 This article answers exactly that question. We'll walk through how to combine CIS `VirtualServer` resources with the community project [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) to automatically register DNS records on external DNS providers like AWS Route 53, Infoblox, CoreDNS, Azure DNS, and others — all without touching a zone file by hand.
- 
+
 ---
  
 ## Background: How DNS Automation Typically Works in Kubernetes
@@ -285,41 +285,10 @@ Refer to the [ExternalDNS documentation](https://github.com/kubernetes-sigs/exte
  
 ## Putting It All Together: Summary of the Architecture
  
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Kubernetes Cluster                                             │
-│                                                                 │
-│  ┌──────────────────┐      ┌──────────────────────────────┐    │
-│  │  VirtualServer   │─────▶│  Service (type: LoadBalancer) │    │
-│  │  CRD             │      │  loadBalancerClass: f5.com/.. │    │
-│  │  (ipamLabel or   │      │  allocateLoadBalancerNode     │    │
-│  │   static IP)     │      │  Ports: false                 │    │
-│  └──────────────────┘      │                               │    │
-│          │                 │  status.loadBalancer.ingress: │    │
-│          │                 │    [{ip: "10.1.10.50"}]  ◀────┼──┐ │
-│          │                 └──────────────────────────────┘  │ │
-│          │                           │                        │ │
-│          │                           │ ExternalDNS reads      │ │
-│          │                           │ status + annotation    │ │
-│          │                           ▼                        │ │
-│          │                 ┌──────────────────────┐           │ │
-│          │                 │  ExternalDNS         │           │ │
-│          │                 │  (community project)  │           │ │
-│          │                 └──────────────────────┘           │ │
-│          │                           │                        │ │
-└──────────┼───────────────────────────┼────────────────────────┼─┘
-           │                           │                        │
-           ▼                           ▼                        │
-    ┌─────────────┐          ┌──────────────────┐               │
-    │   BIG-IP    │          │  External DNS     │               │
-    │   VIP       │──────────│  (Route53,        │               │
-    │  10.1.10.50 │  CIS     │   Infoblox, etc.) │               │
-    │             │  writes  │                   │               │
-    │             │  IP back─┼───────────────────┼───────────────┘
-    └─────────────┘          └──────────────────┘
-```
- 
----
+<figure>
+    <a href="/assets/cis-externaldns/cis-externaldns-diagram.png"><img src="/assets/cis-externaldns/cis-externaldns-diagram.png"></a>
+    <figcaption>High-level diagram of how the IP address is populated in the Status of the LoadBalancer service and then used by ExternalDNS</figcaption>
+</figure>
  
 ## Key Considerations and Design Choices
  
