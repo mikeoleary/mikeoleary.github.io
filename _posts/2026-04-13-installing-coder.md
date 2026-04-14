@@ -54,4 +54,19 @@ sudo systemctl restart coder
 
 I have a URL `coder.my-f5.com` that I have pointed at a typical VirtualServer on BIG-IP. It listens on HTTPS (tcp/443) and decrypts traffic with a clientSSL profile, but passes traffic to the Coder server on HTTP (tcp/3000) with **no** serverSSL profile.
 
+You should also install Docker on the Coder server. I use [my own instructions]({% post_url 2025-04-15-official-vs-unofficial-docker-packages %}).
+
+
+I also run these commands so that the `ubuntu` user can run docker commands without sudo
+
+```bash
+sudo usermod -aG docker ubuntu
+newgrp docker
+sudo systemctl restart docker
+sudo systemctl restart coder
+
+```
+
+
+
 In the next post, I'll offload authentication from Coder to BIG-IP APM.
