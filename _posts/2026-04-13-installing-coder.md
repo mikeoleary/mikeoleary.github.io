@@ -40,6 +40,13 @@ Notice a few files:
 - `/usr/lib/systemd/system/coder.service`. - this defines the service and references an EnvironmentFile
 - `/etc/coder.d/coder.env` - this EnvironmentFile holds configuration for the service
 
+Notice that the files above exist, but the service is disabled:
+
+```bash
+sudo systemctl list-unit-files --state=disabled #Show disabled services
+sudo systemctl status coder #this will show the daemon is not enabled
+```
+
 Edit the file `/etc/coder.d/coder.env` and add/edit these values:
 
 ```ini
@@ -47,9 +54,18 @@ CODER_ACCESS_URL=https://coder.my-f5.com
 CODER_HTTP_ADDRESS='0.0.0.0:3000'
 #We may add more later
 ```
-Restart the service:
+
+Also, allow coder to run docker commands without sudo:
+
+```ini
+sudo usermod -aG docker coder
+newgrp docker
+```
+
+Enable and start the coder service so we don't need to run `coder server` with our own shell variables:
 ````bash
-sudo systemctl restart coder
+sudo systemctl enable coder
+sudo systemctl start coder
 ````
 
 I have a URL `coder.my-f5.com` that I have pointed at a typical VirtualServer on BIG-IP. It listens on HTTPS (tcp/443) and decrypts traffic with a clientSSL profile, but passes traffic to the Coder server on HTTP (tcp/3000) with **no** serverSSL profile.
