@@ -27,15 +27,18 @@ In this post I'm documenting my setup: Coder for ephemeral workspace management,
 ## Deploy AWS EC2 instance, install Coder, configure basics
 Coder can run on different platforms, including K8s. I'm going to use Ubuntu 24.04 on EC2 because it will be a quick lab. I'll use a `m7i.xlarge` instance and give myself 100 GB of disk space.
 
+#### Install Docker
+First, I install Docker on the Coder server. I use [my own instructions]({% post_url 2025-04-15-official-vs-unofficial-docker-packages %}).
+
+#### Install Coder
 ```bash
-# 1. Install Docker and Coder
+# 1. Install Coder
 curl -L https://coder.com/install.sh | sh
 
 #Run this command to allow the binary to open raw sockets without requiring root:
 sudo setcap cap_net_raw+ep $(which coder)
 
 ```
-
 Notice a few files:
 - `/usr/lib/systemd/system/coder.service`. - this defines the service and references an EnvironmentFile
 - `/etc/coder.d/coder.env` - this EnvironmentFile holds configuration for the service
@@ -54,35 +57,19 @@ CODER_ACCESS_URL=https://coder.my-f5.com
 CODER_HTTP_ADDRESS='0.0.0.0:3000'
 #We may add more later
 ```
+Also, add coder user to docker group, which will allow coder to run docker commands without sudo:
 
-Also, allow coder to run docker commands without sudo:
-
-```ini
+```bash
 sudo usermod -aG docker coder
 newgrp docker
 ```
 
-Enable and start the coder service so we don't need to run `coder server` with our own shell variables:
+Enable and start the coder service:
 ````bash
 sudo systemctl enable coder
 sudo systemctl start coder
 ````
 
 I have a URL `coder.my-f5.com` that I have pointed at a typical VirtualServer on BIG-IP. It listens on HTTPS (tcp/443) and decrypts traffic with a clientSSL profile, but passes traffic to the Coder server on HTTP (tcp/3000) with **no** serverSSL profile.
-
-You should also install Docker on the Coder server. I use [my own instructions]({% post_url 2025-04-15-official-vs-unofficial-docker-packages %}).
-
-
-I also run these commands so that the `ubuntu` user can run docker commands without sudo
-
-```bash
-sudo usermod -aG docker ubuntu
-newgrp docker
-sudo systemctl restart docker
-sudo systemctl restart coder
-
-```
-
-
 
 In the next post, I'll offload authentication from Coder to BIG-IP APM.
