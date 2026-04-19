@@ -28,9 +28,20 @@ In this post I'm documenting my setup: Coder for ephemeral workspace management,
 Coder can run on different platforms, including K8s. I'm going to use Ubuntu 24.04 on EC2 because it will be a quick lab. I'll use a `m7i.xlarge` instance and give myself 100 GB of disk space.
 
 #### Install Docker
-First, I install Docker on the Coder server. I use [my own instructions]({% post_url 2025-04-15-official-vs-unofficial-docker-packages %}).
+First, I have created a file at `/etc/docker/daemon.json` with this content:
+```json
+{
+  "bip": "10.10.0.1/24"
+}
+```
+
+This is because I want to choose the default bridge network CIDR block for this demo. Why? I am going to use a pre-configured IP range for my containers. This might come in handy later if I decide to implement a VPN for users to reach their docker containers. 
+
+After this file exists, I install Docker on the Coder server. I use [my own instructions]({% post_url 2025-04-15-official-vs-unofficial-docker-packages %}).
 
 #### Install Coder
+Now install Coder:
+
 ```bash
 # 1. Install Coder
 curl -L https://coder.com/install.sh | sh
@@ -39,7 +50,12 @@ curl -L https://coder.com/install.sh | sh
 sudo setcap cap_net_raw+ep $(which coder)
 
 ```
-Notice a few files:
+Notice that a user was created called `coder`:
+```bash
+sudo more /etc/passwd | grep coder
+```
+
+Notice these files that were created:
 - `/usr/lib/systemd/system/coder.service`. - this defines the service and references an EnvironmentFile
 - `/etc/coder.d/coder.env` - this EnvironmentFile holds configuration for the service
 
@@ -55,7 +71,6 @@ Edit the file `/etc/coder.d/coder.env` and add/edit these values:
 ```ini
 CODER_ACCESS_URL=https://coder.my-f5.com
 CODER_HTTP_ADDRESS='0.0.0.0:3000'
-#We may add more later
 ```
 Also, add coder user to docker group, which will allow coder to run docker commands without sudo:
 
