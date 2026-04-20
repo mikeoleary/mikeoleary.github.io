@@ -225,36 +225,6 @@ Notice my JWK config is called `My_Manual_JWK`. This will be referenced later.
   - Configure Access Profile (Per-Session Policy)
 
 ---
-Wow, that was a lot! OIDC can be complex. But, APM can also act as a **reverse proxy with header injection**, passing the authenticated user identity to Coder via a trusted header.
-
-**APM iRule for header injection (LTM + APM):**
-
-```tcl
-when HTTP_REQUEST {
-    # APM populates session variables after authentication
-    set username [ACCESS::session data get "session.ad.last.attr.sAMAccountName"]
-    
-    if { $username ne "" } {
-        # Inject trusted identity header to Coder
-        HTTP::header insert "X-Forwarded-User" $username
-        HTTP::header insert "X-Forwarded-Email" "${username}@yourdomain.com"
-    }
-}
-```
-
-On the Coder side, configure OIDC or header auth to trust this header:
-
-```yaml
-# coder server config (coder.yaml or env vars)
-CODER_OIDC_HEADER_USERNAME_FIELD: "X-Forwarded-User"
-# OR use Coder's built-in header auth support
-```
-
-> **Note:** Header-based auth requires that the Coder server be unreachable except through the BIG-IP. If a user can bypass the BIG-IP and hit Coder directly, they can spoof the header. Lock down your firewall rules accordingly.
-
-From a security posture standpoint, this is solid: **no Coder ports are exposed to the internet**, all access is identity-authenticated and group-authorized, and the environments themselves are ephemeral. The blast radius of any compromised workspace is bounded by the workspace's own network isolation and TTL.
-
----
 
 ## Key takeaways
 
