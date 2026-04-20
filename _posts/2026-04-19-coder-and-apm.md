@@ -266,6 +266,11 @@ From a security posture standpoint, this is solid: **no Coder ports are exposed 
 
 **Don't skip the firewall rules.** Header-based SSO only works if Coder is unreachable except through the proxy. Enforce this at the network layer.
 
+
+### References
+* [Coder - OIDC Auth](https://coder.com/docs/admin/users/oidc-auth)
+* [F5 BIG-IP APM — OAuth Authorization Server configuration](https://techdocs.f5.com/en-us/bigip-17-1-0/big-ip-access-policy-manager-oauth-configuration/using-apm-as-an-oauth-2-server.html)
+
 ---
 
 [^1]: I did this by stopping docker with `sudo systemctl stop docker.socket docker.service`. Then, creating a file called `/etc/docker/daemon.json` with my preferred CIDR block for the default docker network (see my previous post for this file). Then I deleted the default docker bridge with `sudo ip link delete docker0` and restarted docker with `sudo systemctl start docker`.
