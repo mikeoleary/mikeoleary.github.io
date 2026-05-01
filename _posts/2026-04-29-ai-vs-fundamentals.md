@@ -49,12 +49,7 @@ Host Application
 
 Notice the component in the middle: *probabilistic reasoning*. The LLM does not parse a deterministic rule to decide which tool to invoke. It reasons about the *semantics* of the available tools — their names, their descriptions, their parameter schemas — and makes an inference about which one best serves the user's intent. It is, in the most literal sense, an educated guess.
 
-In isolation, that's fine. In combination with tools that carry real-world side effects — file deletion, API mutation, kubectl apply — it could be a perfect storm.
-
-Here's something Claude wrote for me, but I like it:
-
-Fred Brooks, writing in *No Silver Bullet* (1986), distinguished between *essential complexity* — the irreducible difficulty inherent to the problem — and *accidental complexity* — the difficulty introduced by our tools and processes. MCP is a masterpiece of accidental complexity reduction. The transport layer, the protocol handshake, the authentication flow: all hidden. What remains is a YAML-style declaration of tools and a conversation. That feels like progress. Brooks would remind us that we have not touched the essential complexity underneath. We have simply moved it somewhere less visible.
-{: .notice--info}
+In isolation, that's fine. In combination with tools that carry real-world side effects, it's concerning. Especially when the tools themselves may be vibecoded (potentially low quality) and the natural language input will be imperfect.
 
 ---
 
@@ -64,9 +59,9 @@ Here's an example I fear will happen with home-grown MCP servers for BIG-IP, for
 
 When you configure an F5 BIG-IP, you work with objects that have precise, non-overlapping definitions. A *VIP* (Virtual IP) is the front-end address that external clients connect to. A *virtual server* is the F5 configuration object that listens on that VIP and applies policies. These terms are close enough in everyday language that a reasonable person — or a language model — might use them interchangeably. In the F5 management plane, they are not interchangeable. Conflating them means you are operating on the wrong object, applying the wrong policy, and potentially taking down traffic for a production service while believing you are doing something benign.
 
-Now expose your network automation layer as MCP tools. Name one `get_virtual_server_config` and another `get_vip_status`. Ask an LLM agent to "check the load balancer for the payments service." Which tool does it call? It depends entirely on which description the model finds semantically closer to "load balancer" and "check." There is no compilation step to catch the mismatch. There is no type system enforcing the distinction. There is a probability distribution over tokens, and at its peak is whichever tool description the model's training made most salient.
+Now expose your network automation layer as MCP tools. Name one `get_virtual_server_config` and another `get_vip_status`. Ask an LLM agent to "check the load balancer for the payments service." Which tool does it call? It depends entirely on which description the model finds semantically closer to "load balancer" and "check." There is no compilation step to catch the mismatch. There is no type system enforcing the distinction. There is a probability, and a reliance on the description of the tools learned by the model.
 
-This is what I mean by *Abstraction Debt* — when human operators lose understanding of the systems they govern. The debt is not visible in normal operations. It becomes visible when you need it most: during an incident, when you are trying to understand what the agent actually did and why.
+This is what I mean by *Abstraction Debt* — when human operators lose understanding of the systems they govern. The debt is not visible in normal operations. It becomes visible when you need it: during an incident, when you are trying to understand what the agent actually did and why, when you are trying to teach others, etc.
 
 ---
 
