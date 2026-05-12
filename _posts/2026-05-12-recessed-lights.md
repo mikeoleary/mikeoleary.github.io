@@ -66,7 +66,7 @@ This is the replacement I used. Remember:
 
 The whole job takes about 15 minutes once you've done it once.
 
-{% include gallery id="gallery" caption="More pics from Sat May 2, 2026" %}
+{% include gallery id="gallery" caption="Straightforward replacement" %}
 
 
 ---
