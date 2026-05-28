@@ -14,10 +14,10 @@ This post is solely so I can copy/paste this in future instead of spending 5 min
     #commands to search f5 images in Azure Marketplace with az cli
 
     #get all offers from f5
-    az vm image list --publisher f5-networks --location eastus2 --all | jq .[].offer
+    az vm image list --publisher f5-networks --location eastus2 --all | jq '[.[].offer] | unique'
 
     #get all skus within an offer
-    az vm image list --publisher f5-networks --offer f5-big-ip-best --location eastus2 --all | jq .[].sku
+    az vm image list --publisher f5-networks --offer f5-big-ip-best --location eastus2 --all | jq '[.[].sku] | unique'
 
     #get all versions within a sku
     az vm image list --publisher f5-networks --offer f5-big-ip-best --sku f5-big-best-plus-hourly-25mbps --location eastus2 --all | jq .[].version
