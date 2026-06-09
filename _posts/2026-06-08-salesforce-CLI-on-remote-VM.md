@@ -154,7 +154,7 @@ Manually request the token via the local Windows browser with a specially constr
 
 | Step | Action | Description |
 | :--- | :--- | :--- |
-| **1** | Construct OAuth URL | For me, this was the URL: https://<instance_url>/services/oauth2/authorize?response_type=token&client_id=PlatformCLI&redirect_uri=http://localhost:1717/OauthRedirect|
+| **1** | Construct OAuth URL | For me, this was the URL: https://(instance_url)/services/oauth2/authorize?response_type=token&client_id=PlatformCLI&redirect_uri=http://localhost:1717/OauthRedirect|
 | **2** | Browser SSO | Pasting that URL into the Windows desktop browser allowed the user to complete their corporate workspace SSO and hit Allow. |
 | **3** | Capture Redirect | The browser redirected to an expected "Site Cannot Be Reached" error page on localhost:1717. We copied the URL straight out of the address bar, which now contained the secret **refresh_token**. |
 | **4** | Format Token File | On the Ubuntu VM, create a custom text file (sfdx_auth.txt) matching the exact URI schema the CLI expects: `force://PlatformCLI::<refreshToken>@<instance_url>` |
