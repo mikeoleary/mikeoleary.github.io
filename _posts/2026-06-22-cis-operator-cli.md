@@ -151,7 +151,7 @@ Once the CSV's `PHASE` reads `Succeeded`, the operator pod is up and the `F5BigI
  
 ## Part 3: Deploying the operand with a YAML manifest
  
-The operator itself doesn't do anything until you create an instance of its CRD. For the F5 CIS operator, that CRD is `F5BigIpCtlr` under the `cis.f5.com/v1` API group. Since this is a Helm-based operator, the spec fields map directly onto the underlying Helm chart's `values.yaml` keys &mdash; which is the whole reason this operator is "just" a packaging layer on top of Helm.
+The operator itself doesn't do anything until you create an instance of its CRD. For the F5 CIS operator, that CRD is `F5BigIpCtlr` under the `cis.f5.com/v1` API group. Since this is a Helm-based operator, the spec fields map directly onto the underlying Helm chart's `values.yaml` keys - which is the whole reason this operator is "just" a packaging layer on top of Helm.
  
 ```yaml
 apiVersion: cis.f5.com/v1
@@ -169,6 +169,8 @@ spec:
     pool_member_type: cluster
     manage_routes: false
     custom_resource_mode: true
+    static_routing_mode: true
+    orchestration_cni: ovn-k8s
   bigip_login_secret: bigip-login
   image:
     repo: f5networks/cntr-ingress-svcs
