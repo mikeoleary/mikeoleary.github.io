@@ -6,6 +6,8 @@ toc: true
 toc_sticky: true
 ---
 
+![Meetup contest](/assets/meetup/ardan-labs1.jpg)
+
 ## AI Agent Build Competition
 
 A skills-building competition for Boston Kubernetes Meetup attendees. The goal isn't to build the fanciest agent — it's to practice a new skill, document what you learned, and publish it so others can learn too.
@@ -68,7 +70,7 @@ Polish is welcome but isn't the bar — a clearly documented learning journey wi
 
 ### Timeline
 
-Submit your entry before **July 31, 2026**.
+Submit your entry before **July 16, 2026**.
 
 ---
 

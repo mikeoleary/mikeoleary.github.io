@@ -13,3 +13,6 @@ The CNCF also has a [community chapter in Boston](https://community.cncf.io/bost
 
 #### For K8s engineers
 - [Join us in Boston!](https://www.meetup.com/boston-kubernetes-meetup)
+
+#### Other
+- [AI Agent Build competition](/meetup/ai-agent-competition)
