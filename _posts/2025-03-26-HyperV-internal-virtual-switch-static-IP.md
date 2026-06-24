@@ -142,5 +142,38 @@ I like my persistent Ubuntu VM. I'm not a professional developer, but if I was I
 
 I don't specialize in virtualization or Hyper-V so I'm open to learning new ways of practical approaches to dev/engineering workspaces and environments. Thanks for reading!
 
+### Reference files to copy later
 
+Example with static (non-DHCP) address
+
+```yaml
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses:
+        - 172.20.100.101/24
+      nameservers:
+        addresses: [8.8.8.8,8.8.4.4]
+      routes:
+        - to: default
+          via: 172.20.100.1
+```
+
+Example with DHCP
+
+```yaml
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: false
+```
 
