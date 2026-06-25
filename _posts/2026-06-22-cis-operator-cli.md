@@ -11,6 +11,11 @@ tags:
 toc: true
 ---
 
+<figure>
+    <a href="/assets/cis-operator-cli/operator-header.jpg"><img src="/assets/cis-operator-cli/operator-header.jpg"></a>
+    <figcaption>Telephone Operators. Not the same thing.</figcaption>
+</figure>
+
 I've installed F5 Container Ingress Services (CIS) into OpenShift a  different ways over the years - raw manifests, Helm, and the OperatorHub tile. This week I wanted to install it via the OperatorHub operator, but skip the console entirely and do it from the CLI instead. The goal is to replicate, step by step, what a customer's GitOps pipeline does when it subscribes to an operator, so I understand exactly what objects get created and in what order.
  
 This post walks through:

@@ -13,6 +13,11 @@ toc: true
 toc_sticky: true
 ---
 
+<figure>
+    <a href="/assets/cis-operator-lb/operator-header2.jpg"><img src="/assets/cis-operator-lb/operator-header-2.jpg"></a>
+    <figcaption>Don't forget to drink 8 glasses of water today.</figcaption>
+</figure>
+
 In [my last post]({{ site.url }}/openshift/cis-operator-cli/) I installed the F5 CIS operator from the CLI and brought up the `F5BigIpCtlr` operand. This post picks up right after that: the operator is running, CIS is healthy, and now a customer wants to expose an application with a plain `Service` of `type: LoadBalancer` instead of an `Ingress`, a `Route`, or a `VirtualServer` custom resource.
 
 ### Why Service Type LB? 
