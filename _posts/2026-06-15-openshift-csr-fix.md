@@ -9,7 +9,6 @@ toc: true
 
 <figure>
     <a href="/assets/openshift-csr-fix/openshift-csr-fix-header.jpg"><img src="/assets/openshift-csr-fix/openshift-csr-fix-header.jpg"></a>
-    <figcaption>Heavy machinery operator. Not the same thing.</figcaption>
 </figure>
 
 
