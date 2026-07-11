@@ -164,6 +164,7 @@ Drawer faces cut at 21 × 7.5 inches (full overlay, covering the 20.25-inch open
 
 ### What I'd do differently
 
+- **Face panels.** Seeing 3/4 inch plywood edges makes this look like a dad's DIY project (which it is), not a professional job. Next time I might plan for something more.
 - **Plan better.** If I did this again I'd spend more time drawing this out.
 - **Invest in a better stud finder earlier.** I've done this now.
 - **Double-check dimensions if Home Depot does the cuts**. After getting 1x 48-inch piece cut into 4 pieces, I had 3x 12-inch widths, and 1x ~11 inch. I forgot to account for minor variances.
