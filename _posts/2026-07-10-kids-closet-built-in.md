@@ -11,8 +11,8 @@ gallery:
     image_path: /assets/closet-shelves/IMG_6238.JPEG
     alt: "closet before photo"
     title: "closet before photo"
-  - url: /assets/closet-shelves/IMG_6637.JPEG
-    image_path: /assets/closet-shelves/IMG_6637.JPEG
+  - url: /assets/closet-shelves/IMG_6664.JPEG
+    image_path: /assets/closet-shelves/IMG_6664.JPEG
     alt: "closet after photo"
     title: "closet after photo"
 gallery2:
@@ -66,6 +66,14 @@ gallery5:
 gallery6:
   - url: /assets/closet-shelves/IMG_6637.JPEG
     image_path: /assets/closet-shelves/IMG_6637.JPEG
+    alt: "Done"
+    title: "Done"
+  - url: /assets/closet-shelves/IMG_6666.JPEG
+    image_path: /assets/closet-shelves/IMG_6666.JPEG
+    alt: "Done"
+    title: "Done"
+  - url: /assets/closet-shelves/IMG_6665.JPEG
+    image_path: /assets/closet-shelves/IMG_6665.JPEG
     alt: "Done"
     title: "Done"
 ---
