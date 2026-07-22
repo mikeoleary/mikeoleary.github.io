@@ -1,0 +1,53 @@
+$ curl -k https://kong-demo.my-f5.com/httpbin/get
+{
+  "args": {},
+  "headers": {
+    "Accept": [
+      "*/*"
+    ],
+    "Connection": [
+      "keep-alive"
+    ],
+    "Host": [
+      "kong-demo.my-f5.com"
+    ],
+    "User-Agent": [
+      "curl/8.18.0"
+    ],
+    "Via": [
+      "1.1 kong/3.9.3"
+    ],
+    "X-Forwarded-For": [
+      "10.0.2.11"
+    ],
+    "X-Forwarded-Host": [
+      "kong-demo.my-f5.com"
+    ],
+    "X-Forwarded-Path": [
+      "/httpbin/get"
+    ],
+    "X-Forwarded-Port": [
+      "80"
+    ],
+    "X-Forwarded-Prefix": [
+      "/httpbin"
+    ],
+    "X-Forwarded-Proto": [
+      "http"
+    ],
+    "X-Kong-Request-Id": [
+      "c2e0f22aaa0fa601e225b55225661355"
+    ],
+    "X-Real-Ip": [
+      "10.0.2.11"
+    ]
+  },
+  "method": "GET",
+  "origin": "10.0.2.11",
+  "url": "http://kong-demo.my-f5.com/get"
+}
+
+$ curl -k -H 'apikey: ...' https://kong-demo.my-f5.com/app2/
+<html><head><title>App 2</title></head>
+<body><h1>Hello from App 2 (nginx)</h1>
+<p>This is the second backend behind Kong.</p></body></html>

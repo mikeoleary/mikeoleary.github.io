@@ -1,0 +1,29 @@
+### No API key -> Kong returns 401
+$ curl -k -i https://kong-demo.my-f5.com/app2/
+HTTP/1.1 401 Unauthorized
+Date: Mon, 20 Jul 2026 23:24:24 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+WWW-Authenticate: Key
+Content-Length: 96
+X-Kong-Response-Latency: 0
+X-Kong-Request-Id: 0303f109a7512323dcd722413fed0b32
+Set-Cookie: BIGipServer~openshift~Shared~kong_kong_proxy_80_kong_f5_demo_kong_demo_my_f5_com=788562186.16415.0000; path=/; Httponly; Secure
+Set-Cookie: TS0152d47a=01295038b2acc03d9cd9d28d6ad77a7b20df3ca030fc861c593246cff473a45908a0367ea8542b3d8f262cf9e201f7951480da15ea1a098c03dc9708bc5e945488f63eafe7; Path=/; 
+
+{
+
+### With API key -> 200
+$ curl -k -i -H 'apikey: demo-secret-key-12345' https://kong-demo.my-f5.com/app2/
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Content-Length: 141
+Connection: keep-alive
+Date: Mon, 20 Jul 2026 23:24:24 GMT
+Last-Modified: Mon, 20 Jul 2026 16:37:11 GMT
+ETag: "6a5e4eb7-8d"
+Accept-Ranges: bytes
+X-Kong-Upstream-Latency: 0
+X-Kong-Proxy-Latency: 0
+Via: 1.1 kong/3.9.3
+X-Kong-Request-Id: 33e94e3cc3b6331d5834a97a90f8ef43

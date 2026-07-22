@@ -1,0 +1,26 @@
+### SQL injection attempt (blocked at F5 before reaching Kong)
+$ curl -k -i "https://kong-demo.my-f5.com/httpbin/get?id=1' OR '1'='1'--"
+HTTP/1.1 403 Forbidden
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Cache-Control: no-cache
+Connection: close
+Content-Type: text/html; charset=utf-8
+Pragma: no-cache
+Content-Length: 201
+
+<html><head><title>Blocked by F5 BIG-IP WAF</title></head><body><h1>403 Forbidden</h1><p>Request blocked by F5 Advanced WAF before reaching Kong.</p><p>Support ID: 1487496205675004256</p></body></html>
+### Cross-site scripting attempt (blocked at F5 before reaching Kong)
+$ curl -k -i "https://kong-demo.my-f5.com/httpbin/anything?q=<script>alert(1)</script>"
+HTTP/1.1 403 Forbidden
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Cache-Control: no-cache
+Connection: close
+Content-Type: text/html; charset=utf-8
+Pragma: no-cache
+Content-Length: 201
+
+<html><head><title>Blocked by F5 BIG-IP WAF</title></head><body><h1>403 Forbidden</h1><p>Request blocked by F5 Advanced WAF before reaching Kong.</p><p>Support ID: 1487496205675004272</p></body></html>

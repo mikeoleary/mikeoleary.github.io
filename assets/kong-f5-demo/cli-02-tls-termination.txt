@@ -1,0 +1,4 @@
+$ curl -kv https://kong-demo.my-f5.com/httpbin/get 2>&1 | grep -E 'subject:|issuer:'
+* SSL connection using TLSv1.2 / ECDHE-ECDSA-AES128-GCM-SHA256 / secp256r1 / id-ecPublicKey
+*   subject: CN=kong-demo.my-f5.com
+*   issuer: C=US; O=Let's Encrypt; CN=YE2

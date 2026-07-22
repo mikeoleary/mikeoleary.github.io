@@ -1,0 +1,113 @@
+# Reference manifests (as deployed in namespace kong-f5-demo)
+
+### F5 CIS custom resource: VirtualServer (the F5 edge entry point)
+apiVersion: cis.f5.com/v1
+kind: VirtualServer
+metadata:
+  name: kong-proxy-vs
+  namespace: kong-f5-demo
+  labels:
+    f5cr: "true"
+spec:
+  host: kong-demo.my-f5.com
+  virtualServerAddress: 10.0.0.101
+  tlsProfileName: kong-f5-demo-tls
+  waf: /Common/kong_demo_waf_policy
+  pools:
+    - path: /
+      service: kong-kong-proxy
+      servicePort: 80
+
+### F5 CIS custom resource: TLSProfile (edge TLS termination on BIG-IP)
+apiVersion: cis.f5.com/v1
+kind: TLSProfile
+metadata:
+  name: kong-f5-demo-tls
+  namespace: kong-f5-demo
+  labels:
+    f5cr: "true"
+spec:
+  hosts:
+    - kong-demo.my-f5.com
+  tls:
+    termination: edge
+    reference: secret
+    clientSSL: kong-f5-demo-tls   # Kubernetes TLS secret
+
+### Kong Ingress: httpbin route (rate-limiting plugin attached)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin
+  namespace: kong-f5-demo
+  annotations:
+    konghq.com/strip-path: "true"
+    konghq.com/plugins: rate-limiting-demo
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: /httpbin
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: httpbin
+                port:
+                  number: 80
+
+### Kong Ingress: app2 route (key-auth plugin attached)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app2
+  namespace: kong-f5-demo
+  annotations:
+    konghq.com/strip-path: "true"
+    konghq.com/plugins: key-auth-demo
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: /app2
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: app2
+                port:
+                  number: 80
+
+### KongPlugin: rate-limiting (10 requests/minute, local counter)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-demo
+  namespace: kong-f5-demo
+config:
+  minute: 10
+  policy: local
+plugin: rate-limiting
+
+### KongPlugin: key-auth (API key carried in the "apikey" header)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: key-auth-demo
+  namespace: kong-f5-demo
+config:
+  key_names:
+    - apikey
+plugin: key-auth
+
+### KongConsumer + credential secret (the API client identity)
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: demo-consumer
+  namespace: kong-f5-demo
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: demo-consumer
+credentials:
+  - demo-apikey        # Secret of type key-auth holding key: demo-secret-key-12345

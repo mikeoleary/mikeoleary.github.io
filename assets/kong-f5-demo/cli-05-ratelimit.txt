@@ -1,0 +1,25 @@
+### Rate-limit headers Kong adds on a normal request (limit 10/min):
+RateLimit-Remaining: 9
+RateLimit-Reset: 26
+RateLimit-Limit: 10
+X-RateLimit-Remaining-Minute: 9
+X-RateLimit-Limit-Minute: 10
+
+### 12 requests in one minute against the httpbin route (Kong rate-limiting plugin):
+req  1 -> 200
+req  2 -> 200
+req  3 -> 200
+req  4 -> 200
+req  5 -> 200
+req  6 -> 200
+req  7 -> 200
+req  8 -> 200
+req  9 -> 200
+req 10 -> 429
+req 11 -> 429
+req 12 -> 429
+
+### Body returned by Kong once the limit is exceeded:
+{
+  "message":"API rate limit exceeded",
+  "request_id":"d75e6d4912876f02ee27143d5faf041a"
