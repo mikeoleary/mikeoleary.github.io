@@ -61,11 +61,11 @@ client ──HTTPS──▶ F5 BIG-IP (TLS + WAF + LB) ──HTTP──▶ Kong 
 
 #### F5 BIG-IP — the edge / entry point:
 
-- **TLS termination.** BIG-IP presents the TLS certificicate, decrypts, and forwards as HTTP to Kong inside the cluster.
+- **TLS termination.** BIG-IP presents the TLS certificate, decrypts, and forwards as HTTP to Kong inside the cluster.
 - **Advanced WAF.** L7 protection (SQLi, XSS, etc.) is enforced at the edge, before traffic reaches Kong.
 - **Load balancing straight to pods.** F5 Container Ingress Services (CIS) runs in cluster mode, so the BIG-IP pool members are the Kong proxy **pod IPs**.
 
-#### Kong — behind F5, inside OpenShift:**
+#### Kong — behind F5, inside OpenShift:
 
 - **Request routing** to backend services by path.
 - **Rate limiting** per route.
