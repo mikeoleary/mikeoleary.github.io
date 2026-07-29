@@ -22,13 +22,18 @@ gallery:
     title: "Screenshot 2: adding a gateway"
 ---
 
+<figure>
+    <a href="/assets/mulesoft-f5-demo/mulesoft-proxy-big-ip.png"><img src="/assets/mulesoft-f5-demo/mulesoft-proxy-big-ip.png"></a>
+    <figcaption>Traffic flow from outside -> inside the cluster.</figcaption>
+</figure>
+
 **Same edge pattern, a very different gateway — and a trail of real-world friction worth documenting**
 
-In an [earlier post]({% post_url 2026-07-20-kong-on-openshift-behind-bigip %}) I put open-source Kong behind an F5 BIG-IP on OpenShift and showed the two are complementary: the ADC owns the edge (TLS, WAF, pod-direct load balancing), the gateway owns API management (routing, rate-limiting, auth). The whole point of that pattern is that the gateway is **replaceable** — the edge doesn't change.
+In an [earlier post]({% post_url 2026-07-20-kong-on-openshift-behind-bigip %}) I put open-source Kong behind an F5 BIG-IP on OpenShift and showed the two are complementary: the ADC owns the edge (TLS, WAF, pod-direct load balancing), the gateway owns API management (routing, rate-limiting, auth). The whole point is that the pattern is **modular** — the edge layer and API gateway layer can be switched for alternatives.
 
-I'll show this again, this time the in-cluster gateway is **MuleSoft Omni Gateway** — the product formerly (and still, in most logs and docs) called **Flex Gateway**. Same BIG-IP, same CIS, same OpenShift cluster, same "client → BIG-IP → gateway → backends" architecture. Only the middle layer changed.
+I'll show this again. This time the in-cluster gateway is **MuleSoft Omni Gateway** — the product formerly (and still, in most logs and docs) called **Flex Gateway**. Same BIG-IP, same CIS, same OpenShift cluster, same "client → BIG-IP → gateway → backends" architecture. Only the middle layer changed.
 
-But where the Kong write-up was a clean "here's the architecture" piece, this one is a **field report**. Omni Gateway on Kubernetes has some sharp edges that cost me the better part of a day, and none of them are in the happy-path docs. If you're an F5 SE, a MuleSoft architect, or a platform engineer about to try this, the goal here is to save you that day.
+But where the Kong write-up was a clean "here's the architecture" piece, this one is a **field report**. Omni Gateway on Kubernetes had some troubleshooting - at least for me, with a trial license, learning by doing. If you're a platform engineer about to try this, the goal here is to save you that day.
 
 The end state:
 
@@ -173,7 +178,9 @@ Three layers, each independently testable, each ignorant of the others' internal
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-The gateway lives in namespace `gateway`; the backends live in `mulesoft-demo`. BIG-IP routes on hostname and neither knows nor cares what's behind the gateway. The gateway doesn't know a BIG-IP exists. That decoupling is the whole point — and it's what makes the "swap Kong for MuleSoft" exercise a middle-layer change.
+The gateway lives in namespace `gateway`; the backends live in `mulesoft-demo`. BIG-IP routes on hostname to the Mulesoft gateway. 
+
+The BIG-IP doesn't know what's behind the gateway. The gateway doesn't know a BIG-IP exists. 
 
 Here's the running environment:
 
@@ -205,7 +212,7 @@ Everything here is done the Kubernetes-native way: `ApiInstance` for the listene
 
 #### Getting routing right: the `ApiInstance`
 
-First friction point: **`kubectl explain` wasn't helpful**. The published examples I found show one structure but I had to do slightly differently than what I found. Here's the structure that works on v1.13.3:
+First friction point: `kubectl explain` wasn't helpful. The published examples I found show one structure but I had to do slightly differently than what I found. Here's the structure that works on v1.13.3:
 
 ```yaml
 apiVersion: gateway.mulesoft.com/v1alpha1
@@ -229,6 +236,7 @@ spec:
 ```
 
 > **Why `:8081`?** The Helm chart already stands up listeners on `:80` and `:443` (you'll see `ApiInstance/ingress-http` and `ingress-https` in the namespace). Rather than fight those — and rather than deal with the low-port SCC drama from Part 1 — I gave the demo API its own listener on a high port. Cleaner, and it sidesteps `NET_BIND_SERVICE` entirely.
+{: .notice --info}
 
 Prove routing works **before** you add a single policy. Port-forward to the listener and hit each path:
 
@@ -243,13 +251,62 @@ curl -s http://localhost:18081/b   # -> app-b (mendhak/http-https-echo)
 
 #### The schema mismatch: Extension definitions vs. PolicyBinding reality
 
-Here's the one that will cost you the most time if you're not warned. MuleSoft ships **Extension definitions** — YAML that describes each policy's properties. It is entirely reasonable to assume those property names and their nesting are what you put in a `PolicyBinding`.
+Here's the one that will cost you the most time if you're not warned. I could not find a way to learn the expected schema or Mulesoft CRD's. Check this out:
 
-**They are not.** In three distinct ways:
+```bash
+ubuntu@ubuntu-Virtual-Machine:~/mulesoft/cis-resources$ kubectl get crd policybindings.gateway.mulesoft.com -o yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: "2026-07-22T20:38:50Z"
+  generation: 1
+  name: policybindings.gateway.mulesoft.com
+  resourceVersion: "829989"
+  uid: c3fffbe6-9644-477f-bf3f-3ee953f12bf2
+spec:
+  conversion:
+    strategy: None
+  group: gateway.mulesoft.com
+  names:
+    kind: PolicyBinding
+    listKind: PolicyBindingList
+    plural: policybindings
+    singular: policybinding
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The target to apply the Policy
+      jsonPath: .spec.targetRef.name
+      name: Target
+      type: string
+    - description: The Policy to apply
+      jsonPath: .spec.policyRef.name
+      name: Policy
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+......[redacted status fields].....
+```
 
-1. **The policy name is different.** The Extension is `rate-limit`, but you bind to `rate-limiting-flex`. Likewise `jwt-validation` → `jwt-validation-flex`. The name in `policyRef.name` is the *implementation* name, not the Extension name.
-2. **Field names differ.** More on this in the JWT section — the field the Extension calls one thing, the binding calls another.
-3. **Nesting differs.** Properties the Extension lists flat (`keySelector`, `exposeHeaders`, `clusterizable`) actually live *inside* the `rateLimits` array item, not at the top of `config`.
+The key section is below. 
+
+```yaml
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+```
+
+This means that you can put anything in the CRD and it's treated as valid by kubectl. That's bad - I had no real way of troubleshooting my CRD's. Perhaps these are just the CRD's installed by Helm, but this is not helpful. 
 
 The only reliable method I found was to switch to a different AI model that I had helping me :)
 
@@ -314,7 +371,7 @@ $ curl -s localhost:18081/a          # body once the budget is spent
 - **`targetRef.kind: ApiInstance` is mandatory.** Omit it and the binding won't attach.
 - **Honesty check on `exposeHeaders`.** I set `exposeHeaders: true` expecting `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset` headers on allowed responses. On v1.13.3 in this local-mode setup I did **not** see them emitted on the 200s — the enforcement (200→429) is rock solid, but the informational headers didn't surface for me. If your clients depend on `RateLimit-*` headers to self-throttle, validate that behavior on your version before you promise it downstream.
 
-### JWT validation — and the field names the docs get wrong
+#### JWT validation
 
 This is where I'll **correct my own initial notes**. If you follow blog posts (including drafts of this one) that show `jwtSigningMethod`, `jwtSigningKeyLength`, and `jwtKey`, the binding will not behave. The **actual working field names** on v1.13.3 are `signingMethod`, `signingKeyLength`, and `textKey`:
 
@@ -385,7 +442,7 @@ Error generating PEM InvalidData(InvalidByte(4, 45))
 
 That error is a red herring the first time you see it — it looks like a certificate problem, but the real cause is "you gave me base64 and `text` origin." Keep the secret plain.
 
-#### The 32-bit WASM timestamp gotcha (real, and I have the panic to prove it)
+#### The 32-bit WASM timestamp gotcha
 
 Flex/Omni Gateway runs each policy as a **WebAssembly module** (`wasm32-unknown-unknown`) inside Envoy. The `jwt-validation` policy is Rust compiled to that 32-bit WASM target, and its claim-parsing code calls `.unwrap()` on a timestamp conversion. Feed it an `exp` that's large enough to overflow the conversion and the `.unwrap()` panics on `None`, which traps the WASM module on an `unreachable` instruction — and the gateway returns **`503`** for that request.
 
@@ -588,8 +645,4 @@ Same behavior through the edge as at the gateway — which is exactly what "the 
 
 ### Wrapping up
 
-Two gateways, one edge pattern. Kong or MuleSoft Omni Gateway, the BIG-IP side barely changed: TLS and pod-direct load balancing at the edge via CIS, API routing/rate-limiting/auth inside the cluster. That's the payoff of clean layering — **the gateway is a swappable component.**
-
-Where MuleSoft differs from Kong is in the *operational texture*: a consequential, silently-failing registration-mode decision up front; a policy schema you have to reverse-engineer rather than read; and a WASM policy runtime with a genuine robustness bug worth knowing about. None of these are dealbreakers, and all of them are one-time costs — but they're exactly the friction that gets left out of vendor happy-paths, so here it is, written down, so the next person spends their afternoon on something better.
-
-*Future work: exercising a real F5 Advanced WAF policy end-to-end (the attach point is already wired via the Policy CR), replacing the self-signed cert, and testing `clusterizable: true` rate limiting across multiple gateway replicas.*
+Two gateways, one edge pattern. Kong or MuleSoft Gateway, the BIG-IP side barely changed: TLS and pod-direct load balancing at the edge via CIS, API routing/rate-limiting/auth inside the cluster. That's the payoff of clean layering — **the gateway is a swappable component.**
