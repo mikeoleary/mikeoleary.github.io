@@ -88,6 +88,26 @@ Mostly for the sake of a note so I don't forget, I used 1/2 inch flat washers (n
 
 {% include gallery id="gallery3" caption="Photos below show replacement bibb screw and washer. I ended up using flat, not bevelled, washer. I think the photo shows a bevelled washer" %}
 
+
+### Another note: packing nut
+
+The packing nut is the smaller, front-most hex nut—the one closest to the splined shaft where your handle attaches. Tightening this nut squeezes the internal packing seal against the shaft to stop leaks coming out along the stem.
+
+<figure>
+    <a href="/assets/faucets/packing-nut.jpg"><img src="/assets/faucets/packing-nut.jpg"></a>
+    <figcaption>I had to turn this one quarter turn clockwise to slightly tighten, in order to stop a very small leak coming down the stem and out by the faucet.</figcaption>
+</figure>
+
+
+### Another note: slow drain
+
+Lastly, this bathtub has never drained very fast. It's not too slow, but I thought I could speed it up. Long story short, I was able to get some hair and scum from the drain with a thin plastic snake, but it hasnt' improved much. I was able to confirm the slowness is in the horizontal drain pipe from underneath the bath to the vertical drain pipe right behind the bath in the wall. When I removed the barrel plunger from the cylinder (picture below), I couldnt find any hair or blockage to clear. 
+
+<figure>
+    <a href="/assets/faucets/barrel-plunger.jpg"><img src="/assets/faucets/barrel-plunger.jpg"></a>
+    <figcaption></figcaption>
+</figure>
+
 ---
 
 ### Finishing up
