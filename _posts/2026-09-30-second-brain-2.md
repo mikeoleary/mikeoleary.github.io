@@ -4,7 +4,7 @@ title: "Second Brain, part 2"
 date: 2026-09-30
 categories: [ai]
 tags: [second-brain, obsidian, claude, vscode, llm, productivity, people-management]
-description: "Upgrading from Antigravity to Claude Code, switching models, cleaning up the instruction architecture, and wiring Obsidian's Dataview plugin into the corpus."
+excerpt: "Upgrading from Antigravity to Claude Code, switching models, cleaning up the instruction architecture, and wiring Obsidian's Dataview plugin into the corpus."
 ---
 
 [Part 1]({% post_url 2026-09-28-second-brain-1 %}) was my first iteration of an [AI Second Brain](https://fdicostanzo.com/posts/2026/20260427_karpathy_llm_second). Two days in and I have some changes to document. 
